@@ -1,1 +1,415 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>MoneyMate | Dashboard</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/duotone/style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar glass">
+
+<div>
+
+<div class="logo">
+
+<div class="logo-icon">
+<i class="ph-duotone ph-wallet"></i>
+</div>
+
+<span>MoneyMate</span>
+
+</div>
+
+<nav>
+
+<a class="active" href="index.html">
+<i class="ph-duotone ph-squares-four"></i>
+<span>Dashboard</span>
+</a>
+
+<a href="transactions.html">
+<i class="ph-duotone ph-receipt"></i>
+<span>Transactions</span>
+</a>
+
+<a href="analytics.html">
+<i class="ph-duotone ph-chart-line-up"></i>
+<span>Analytics</span>
+</a>
+
+<a href="budget.html">
+<i class="ph-duotone ph-target"></i>
+<span>Budget & Goals</span>
+</a>
+
+<a href="calendar.html">
+<i class="ph-duotone ph-calendar-dots"></i>
+<span>Calendar</span>
+</a>
+
+<a href="settings.html">
+<i class="ph-duotone ph-gear-six"></i>
+<span>Settings</span>
+</a>
+
+</nav>
+
+</div>
+
+</aside>
+
+<main>
+
+<header class="top-header">
+
+<div>
+
+<p class="page-eyebrow">
+Personal Finance
+</p>
+
+<h1>Good afternoon</h1>
+
+<p>
+Here's your financial overview
+</p>
+
+</div>
+
+<button
+class="add-btn"
+onclick="openAddModal()">
+
+<i class="ph-duotone ph-plus-circle"></i>
+
+Add Transaction
+
+</button>
+
+</header>
+
+<section class="balance">
+
+<div>
+
+<p>Current Balance</p>
+
+<h2 id="dashboardBalance">
+฿0
+</h2>
+
+<span id="dashboardBalanceMessage">
+Your financial position
+</span>
+
+</div>
+
+<i class="ph-duotone ph-wallet-cards"></i>
+
+</section>
+
+<section class="cards">
+
+<div class="card glass">
+
+<div class="icon income-icon">
+<i class="ph-duotone ph-trend-up"></i>
+</div>
+
+<p>Total Income</p>
+
+<h3 id="dashboardIncome">
+฿0
+</h3>
+
+</div>
+
+<div class="card glass">
+
+<div class="icon expense-icon">
+<i class="ph-duotone ph-trend-down"></i>
+</div>
+
+<p>Total Expense</p>
+
+<h3 id="dashboardExpense">
+฿0
+</h3>
+
+</div>
+
+<div class="card glass">
+
+<div class="icon saving-icon">
+<i class="ph-duotone ph-piggy-bank"></i>
+</div>
+
+<p>Saving Rate</p>
+
+<h3 id="dashboardSavingRate">
+0%
+</h3>
+
+</div>
+
+</section>
+
+<section class="charts">
+
+<div class="chart glass">
+
+<div class="section-title">
+
+<div>
+
+<p class="page-eyebrow">
+Spending
+</p>
+
+<h3>Expense Breakdown</h3>
+
+</div>
+
+<span>This year</span>
+
+</div>
+
+<div class="chart-canvas-wrap">
+
+<canvas id="expenseChart"></canvas>
+
+</div>
+
+</div>
+
+<div class="chart glass">
+
+<div class="section-title">
+
+<div>
+
+<p class="page-eyebrow">
+Overview
+</p>
+
+<h3>Year Overview</h3>
+
+</div>
+
+<span>2026</span>
+
+</div>
+
+<div class="chart-canvas-wrap">
+
+<canvas id="yearChart"></canvas>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="transaction glass">
+
+<div class="section-title">
+
+<div>
+
+<p class="page-eyebrow">
+Activity
+</p>
+
+<h3>Recent Transactions</h3>
+
+</div>
+
+<a href="transactions.html">
+View All
+</a>
+
+</div>
+
+<div id="dashboardRecentTransactions">
+
+<div class="loading-state">
+
+<div class="loading-spinner"></div>
+
+<p>Loading transactions...</p>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+<div
+class="modal"
+id="addModal">
+
+<div class="modal-content glass transaction-modal">
+
+<div class="modal-top">
+
+<div>
+
+<p class="page-eyebrow">
+New Record
+</p>
+
+<h2>Add Transaction</h2>
+
+</div>
+
+<button
+class="modal-close"
+onclick="closeAddModal()">
+
+<i class="ph-duotone ph-x"></i>
+
+</button>
+
+</div>
+
+<div class="type-switch">
+
+<button
+id="expenseTypeButton"
+class="type-button active"
+onclick="setTransactionType('expense')">
+
+<i class="ph-duotone ph-arrow-down-right"></i>
+
+Expense
+
+</button>
+
+<button
+id="incomeTypeButton"
+class="type-button"
+onclick="setTransactionType('income')">
+
+<i class="ph-duotone ph-arrow-up-right"></i>
+
+Income
+
+</button>
+
+</div>
+
+<div class="amount-box">
+
+<span>฿</span>
+
+<input
+id="modalAmount"
+type="number"
+min="0"
+step="0.01"
+placeholder="0.00">
+
+</div>
+
+<div class="modal-form">
+
+<label>
+
+Transaction name
+
+<div class="input-shell">
+
+<i class="ph-duotone ph-pencil-simple"></i>
+
+<input
+id="modalTitle"
+type="text"
+placeholder="Coffee, Salary...">
+
+</div>
+
+</label>
+
+<label>
+
+Category
+
+<div class="input-shell">
+
+<i class="ph-duotone ph-tag"></i>
+
+<select id="modalCategory">
+
+<option value="Food">Food</option>
+<option value="Transport">Transport</option>
+<option value="Shopping">Shopping</option>
+<option value="Bills">Bills</option>
+<option value="Entertainment">Entertainment</option>
+<option value="Salary">Salary</option>
+<option value="Other">Other</option>
+
+</select>
+
+</div>
+
+</label>
+
+<label>
+
+Date
+
+<div class="input-shell">
+
+<i class="ph-duotone ph-calendar-blank"></i>
+
+<input
+id="modalDate"
+type="date">
+
+</div>
+
+</label>
+
+</div>
+
+<button
+class="save-transaction-btn"
+onclick="saveModalTransaction()">
+
+<i class="ph-duotone ph-check-circle"></i>
+
+Save Transaction
+
+</button>
+
+</div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
 
