@@ -1,1 +1,227 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>MoneyMate | Settings</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/duotone/style.css">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar glass">
+
+<div>
+
+<div class="logo">
+
+<div class="logo-icon">
+
+<i class="ph-duotone ph-wallet"></i>
+
+</div>
+
+<span>MoneyMate</span>
+
+</div>
+
+<nav>
+
+<a href="index.html">
+<i class="ph-duotone ph-squares-four"></i>
+<span>Dashboard</span>
+</a>
+
+<a href="transactions.html">
+<i class="ph-duotone ph-receipt"></i>
+<span>Transactions</span>
+</a>
+
+<a href="analytics.html">
+<i class="ph-duotone ph-chart-line-up"></i>
+<span>Analytics</span>
+</a>
+
+<a href="budget.html">
+<i class="ph-duotone ph-target"></i>
+<span>Budget & Goals</span>
+</a>
+
+<a href="calendar.html">
+<i class="ph-duotone ph-calendar-dots"></i>
+<span>Calendar</span>
+</a>
+
+<a class="active" href="settings.html">
+<i class="ph-duotone ph-gear-six"></i>
+<span>Settings</span>
+</a>
+
+</nav>
+
+</div>
+
+</aside>
+
+<main>
+
+<header>
+
+<p class="page-eyebrow">
+Customization
+</p>
+
+<h1>Settings</h1>
+
+<p>
+Customize your MoneyMate experience
+</p>
+
+</header>
+
+<section class="settings-card glass">
+
+<div class="profile">
+
+<div class="avatar">
+
+<i class="ph-duotone ph-user"></i>
+
+</div>
+
+<div>
+
+<h3>User Profile</h3>
+
+<p>
+Personal Finance User
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="settings-card glass">
+
+<p class="page-eyebrow">
+Interface
+</p>
+
+<h3>Appearance</h3>
+
+<p class="settings-description">
+Choose your preferred theme
+</p>
+
+<div class="theme-grid">
+
+<button onclick="changeTheme('cloud')">
+
+<i class="ph-duotone ph-sun-horizon"></i>
+
+<span>Cloud</span>
+
+</button>
+
+<button onclick="changeTheme('midnight')">
+
+<i class="ph-duotone ph-moon-stars"></i>
+
+<span>Midnight</span>
+
+</button>
+
+<button onclick="changeTheme('forest')">
+
+<i class="ph-duotone ph-tree-evergreen"></i>
+
+<span>Forest</span>
+
+</button>
+
+<button onclick="changeTheme('lavender')">
+
+<i class="ph-duotone ph-sparkle"></i>
+
+<span>Lavender</span>
+
+</button>
+
+</div>
+
+</section>
+
+<section class="settings-card glass">
+
+<p class="page-eyebrow">
+Preferences
+</p>
+
+<h3>Experience</h3>
+
+<div class="setting-row">
+
+<div>
+
+<b>Animation Effect</b>
+
+<p>
+Enable smooth interface animations
+</p>
+
+</div>
+
+<input
+id="animationPreference"
+type="checkbox"
+checked
+onchange="savePreferences()">
+
+</div>
+
+<div class="setting-row">
+
+<div>
+
+<b>Notifications</b>
+
+<p>
+Show application notifications
+</p>
+
+</div>
+
+<input
+id="notificationPreference"
+type="checkbox"
+onchange="savePreferences()">
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
 
