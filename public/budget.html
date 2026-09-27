@@ -1,1 +1,215 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>MoneyMate | Budget & Goals</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/duotone/style.css">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar glass">
+
+<div>
+
+<div class="logo">
+
+<div class="logo-icon">
+
+<i class="ph-duotone ph-wallet"></i>
+
+</div>
+
+<span>MoneyMate</span>
+
+</div>
+
+<nav>
+
+<a href="index.html">
+<i class="ph-duotone ph-squares-four"></i>
+<span>Dashboard</span>
+</a>
+
+<a href="transactions.html">
+<i class="ph-duotone ph-receipt"></i>
+<span>Transactions</span>
+</a>
+
+<a href="analytics.html">
+<i class="ph-duotone ph-chart-line-up"></i>
+<span>Analytics</span>
+</a>
+
+<a class="active" href="budget.html">
+<i class="ph-duotone ph-target"></i>
+<span>Budget & Goals</span>
+</a>
+
+<a href="calendar.html">
+<i class="ph-duotone ph-calendar-dots"></i>
+<span>Calendar</span>
+</a>
+
+<a href="settings.html">
+<i class="ph-duotone ph-gear-six"></i>
+<span>Settings</span>
+</a>
+
+</nav>
+
+</div>
+
+</aside>
+
+<main>
+
+<header>
+
+<p class="page-eyebrow">
+Financial Planning
+</p>
+
+<h1>Budget & Goals</h1>
+
+<p>
+Plan your spending and saving goals
+</p>
+
+</header>
+
+<section class="form-card glass">
+
+<div class="form-heading">
+
+<div>
+
+<p class="page-eyebrow">
+New Goal
+</p>
+
+<h3>Create Saving Goal</h3>
+
+</div>
+
+<div class="form-icon">
+
+<i class="ph-duotone ph-target"></i>
+
+</div>
+
+</div>
+
+<div class="form-grid">
+
+<label>
+
+<span>Goal name</span>
+
+<div class="input-shell">
+
+<i class="ph-duotone ph-flag"></i>
+
+<input
+id="goalName"
+type="text"
+placeholder="New Laptop">
+
+</div>
+
+</label>
+
+<label>
+
+<span>Target amount</span>
+
+<div class="input-shell">
+
+<i class="ph-duotone ph-coins"></i>
+
+<input
+id="goalAmount"
+type="number"
+min="1"
+placeholder="30000">
+
+</div>
+
+</label>
+
+<label class="date-field">
+
+<span>Current saving</span>
+
+<div class="input-shell">
+
+<i class="ph-duotone ph-piggy-bank"></i>
+
+<input
+id="goalCurrent"
+type="number"
+min="0"
+placeholder="5000">
+
+</div>
+
+</label>
+
+</div>
+
+<button
+class="save-main-btn"
+onclick="addGoal()">
+
+<i class="ph-duotone ph-plus-circle"></i>
+
+Create Goal
+
+</button>
+
+</section>
+
+<section class="transaction glass">
+
+<div class="section-title">
+
+<div>
+
+<p class="page-eyebrow">
+Progress
+</p>
+
+<h3>Your Goals</h3>
+
+</div>
+
+</div>
+
+<div id="goalList"></div>
+
+</section>
+
+</main>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
 
