@@ -1,1 +1,283 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>MoneyMate | Calendar</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/duotone/style.css">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar glass">
+
+<div>
+
+<div class="logo">
+
+<div class="logo-icon">
+
+<i class="ph-duotone ph-wallet"></i>
+
+</div>
+
+<span>MoneyMate</span>
+
+</div>
+
+<nav>
+
+<a href="index.html">
+<i class="ph-duotone ph-squares-four"></i>
+<span>Dashboard</span>
+</a>
+
+<a href="transactions.html">
+<i class="ph-duotone ph-receipt"></i>
+<span>Transactions</span>
+</a>
+
+<a href="analytics.html">
+<i class="ph-duotone ph-chart-line-up"></i>
+<span>Analytics</span>
+</a>
+
+<a href="budget.html">
+<i class="ph-duotone ph-target"></i>
+<span>Budget & Goals</span>
+</a>
+
+<a class="active" href="calendar.html">
+<i class="ph-duotone ph-calendar-dots"></i>
+<span>Calendar</span>
+</a>
+
+<a href="settings.html">
+<i class="ph-duotone ph-gear-six"></i>
+<span>Settings</span>
+</a>
+
+</nav>
+
+</div>
+
+</aside>
+
+<main>
+
+<header class="top-header">
+
+<div>
+
+<p class="page-eyebrow">
+Financial Activity
+</p>
+
+<h1>Calendar</h1>
+
+<p>
+View your income and expenses by date
+</p>
+
+</div>
+
+<button
+class="calendar-today-btn"
+onclick="goToToday()">
+
+<i class="ph-duotone ph-calendar-check"></i>
+
+Today
+
+</button>
+
+</header>
+
+<section class="calendar-stats">
+
+<div class="summary-mini glass">
+
+<div class="summary-mini-icon income-mini">
+
+<i class="ph-duotone ph-arrow-up-right"></i>
+
+</div>
+
+<div>
+
+<p>Income this month</p>
+
+<h3 id="calendarIncome">
+฿0
+</h3>
+
+</div>
+
+</div>
+
+<div class="summary-mini glass">
+
+<div class="summary-mini-icon expense-mini">
+
+<i class="ph-duotone ph-arrow-down-right"></i>
+
+</div>
+
+<div>
+
+<p>Expense this month</p>
+
+<h3 id="calendarExpense">
+฿0
+</h3>
+
+</div>
+
+</div>
+
+<div class="summary-mini glass">
+
+<div class="summary-mini-icon balance-mini">
+
+<i class="ph-duotone ph-wallet"></i>
+
+</div>
+
+<div>
+
+<p>Net this month</p>
+
+<h3 id="calendarBalance">
+฿0
+</h3>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="calendar-layout">
+
+<div class="calendar-card glass">
+
+<div class="calendar-header">
+
+<button
+class="calendar-nav-btn"
+onclick="changeMonth(-1)"
+aria-label="Previous month">
+
+<i class="ph-duotone ph-caret-left"></i>
+
+</button>
+
+<div>
+
+<p class="page-eyebrow">
+Monthly View
+</p>
+
+<h2 id="calendarMonth">
+September 2026
+</h2>
+
+</div>
+
+<button
+class="calendar-nav-btn"
+onclick="changeMonth(1)"
+aria-label="Next month">
+
+<i class="ph-duotone ph-caret-right"></i>
+
+</button>
+
+</div>
+
+<div class="calendar-weekdays">
+
+<span>Sun</span>
+<span>Mon</span>
+<span>Tue</span>
+<span>Wed</span>
+<span>Thu</span>
+<span>Fri</span>
+<span>Sat</span>
+
+</div>
+
+<div
+id="calendarGrid"
+class="calendar-grid">
+</div>
+
+</div>
+
+<div class="calendar-detail glass">
+
+<div class="calendar-detail-top">
+
+<div>
+
+<p class="calendar-small-label">
+Selected Date
+</p>
+
+<h3 id="selectedDateTitle">
+Select a date
+</h3>
+
+</div>
+
+<div class="calendar-date-icon">
+
+<i class="ph-duotone ph-calendar-dots"></i>
+
+</div>
+
+</div>
+
+<div id="calendarTransactionList">
+
+<div class="calendar-empty">
+
+<i class="ph-duotone ph-calendar-blank"></i>
+
+<h3>No date selected</h3>
+
+<p>
+Choose a date on the calendar to view transactions.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
 
