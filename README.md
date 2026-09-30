@@ -2,9 +2,9 @@
 
 MoneyMate คือเว็บแอปพลิเคชันสำหรับจัดการรายรับ–รายจ่ายส่วนบุคคล พัฒนาด้วย HTML, CSS, JavaScript, Node.js และ Express.js
 
-ระบบช่วยให้ผู้ใช้สามารถเพิ่ม แก้ไข ลบ ค้นหา และกรองรายการธุรกรรม ดูภาพรวมทางการเงินผ่าน Dashboard และ Charts วิเคราะห์ค่าใช้จ่าย ดูรายการตามวันที่ผ่าน Calendar รวมถึงสร้างเป้าหมายการออมและเพิ่มเงินเข้าสู่เป้าหมายเดิมได้
+ระบบช่วยให้ผู้ใช้สามารถเพิ่ม แก้ไข ลบ ค้นหา และกรองรายการธุรกรรม ดูภาพรวมทางการเงินผ่าน Dashboard และ Charts วิเคราะห์ค่าใช้จ่าย ดูรายการตามวันที่ผ่าน Calendar รวมถึงสร้างและติดตามเป้าหมายการออมได้
 
-โปรเจกต์นี้พัฒนาในรูปแบบ **Full-Stack Web Application** โดย Frontend ติดต่อกับ Backend ผ่าน REST API
+โปรเจกต์นี้พัฒนาในรูปแบบ **Full-Stack Web Application** โดย Frontend ติดต่อกับ Backend ผ่าน REST API ของระบบเอง
 
 ---
 
@@ -14,7 +14,7 @@ MoneyMate คือเว็บแอปพลิเคชันสำหรั�
 
 Dashboard ใช้สำหรับแสดงภาพรวมทางการเงินของผู้ใช้
 
-สามารถแสดงข้อมูลดังต่อไปนี้
+สามารถแสดง
 
 - Current Balance
 - Total Income
@@ -25,15 +25,15 @@ Dashboard ใช้สำหรับแสดงภาพรวมทางก�
 - Recent Transactions
 - Add Transaction
 
-ระบบจะดึงข้อมูล Transaction จาก Backend ผ่าน
+ระบบดึงข้อมูลจาก Backend ผ่าน
 
 ```http
 GET /api/transactions
 ```
 
-จากนั้นนำข้อมูลมาคำนวณยอดรวมและสร้างกราฟด้วย Chart.js
+จากนั้นนำข้อมูลมาคำนวณและแสดงผลด้วย Chart.js
 
-Dashboard ใช้
+Dashboard ประกอบด้วย
 
 - Doughnut Chart สำหรับ Expense Breakdown
 - Bar Chart สำหรับ Year Overview
@@ -42,7 +42,7 @@ Dashboard ใช้
 
 ## 2. Transactions
 
-หน้า Transactions ใช้สำหรับจัดการข้อมูลรายรับและรายจ่าย
+หน้า Transactions ใช้สำหรับจัดการรายการรายรับและรายจ่าย
 
 รองรับ
 
@@ -84,7 +84,7 @@ Date
 
 หน้า Analytics ใช้สำหรับวิเคราะห์ข้อมูลทางการเงินจาก Transaction
 
-ระบบสามารถแสดง
+สามารถแสดง
 
 - Total Expense
 - Saving Rate
@@ -93,7 +93,7 @@ Date
 - Monthly Expense Trend
 - Financial Insight
 
-หน้า Analytics ใช้ Chart.js ในการแสดงข้อมูลแบบ
+หน้า Analytics ใช้ Chart.js แสดงข้อมูลในรูปแบบ
 
 ```text
 Doughnut Chart
@@ -122,7 +122,7 @@ Target Amount: 30,000
 Current Saving: 5,000
 ```
 
-ระบบจะคำนวณ Progress อัตโนมัติด้วยสูตร
+ระบบจะคำนวณ Progress จาก
 
 ```text
 Current Saving ÷ Target Amount × 100
@@ -135,11 +135,17 @@ Current Saving ÷ Target Amount × 100
 = 16.67%
 ```
 
-ระบบจะแสดง Progress Bar และเปอร์เซ็นต์ของเป้าหมาย
+ระบบจะแสดง
+
+- Current Saving
+- Target Amount
+- Progress Percentage
+- Progress Bar
+- Remaining Amount
 
 ### Add Saving
 
-ผู้ใช้สามารถเพิ่มเงินเข้า Goal เดิมได้โดยกดปุ่ม
+ผู้ใช้สามารถเพิ่มเงินเข้า Goal เดิมได้โดยกด
 
 ```text
 Add Saving
@@ -148,11 +154,8 @@ Add Saving
 ตัวอย่าง
 
 ```text
-Current Saving
-฿5,000
-
-Add Saving
-฿3,000
+Current Saving: ฿5,000
+Add Saving: ฿3,000
 ```
 
 ผลลัพธ์
@@ -161,17 +164,17 @@ Add Saving
 ฿8,000 / ฿30,000
 ```
 
-Progress Bar และเปอร์เซ็นต์จะอัปเดตทันที
+Progress จะอัปเดตทันที
 
-เมื่อยอดเงินถึง Target ระบบจะแสดงสถานะ
+เมื่อยอดเงินถึง Target ระบบจะแสดง
 
 ```text
 Goal completed
 ```
 
-ข้อมูล Goals ถูกจัดเก็บด้วย LocalStorage ดังนั้นข้อมูลจะยังคงอยู่หลังจาก Refresh หน้าเว็บ
+ข้อมูล Goals ถูกจัดเก็บด้วย LocalStorage
 
-> หมายเหตุ: Budget & Goals ในเวอร์ชันนี้เน้นการจัดการ Saving Goals และยังไม่มีระบบกำหนด Monthly Budget แยกตาม Category
+> Budget & Goals ในเวอร์ชันนี้เน้น Saving Goals และยังไม่มีระบบ Monthly Budget แยกตาม Category
 
 ---
 
@@ -191,17 +194,7 @@ Goal completed
 
 วันที่ที่มี Transaction จะแสดง Indicator บน Calendar
 
-เมื่อกดวันที่ ระบบจะแสดง Transaction ของวันนั้น
-
-ตัวอย่าง
-
-```text
-30 September 2026
-
-Lunch
-Food
--฿120
-```
+เมื่อกดวันที่ ระบบจะแสดงรายการ Transaction ของวันนั้น
 
 ---
 
@@ -218,7 +211,7 @@ Forest
 Lavender
 ```
 
-Theme จะถูกบันทึกด้วย LocalStorage ดังนั้นเมื่อ Refresh หน้าเว็บ Theme ที่เลือกจะยังคงอยู่
+Theme จะถูกบันทึกด้วย LocalStorage
 
 สามารถเปลี่ยน Theme ได้จาก
 
@@ -235,6 +228,7 @@ Settings → Appearance
 - HTML5
 - CSS3
 - JavaScript
+- Fetch API
 - Chart.js
 - Phosphor Icons
 - LocalStorage
@@ -285,8 +279,10 @@ Mini-project-MoneyMate/
 │   ├── patch-transaction.png
 │   ├── delete-transaction.png
 │   ├── error-400.png
-│   └── error-404.png
+│   ├── error-404.png
+│   └── query-filter.png
 │
+├── .gitignore
 ├── README.md
 └── report.pdf
 ```
@@ -319,19 +315,7 @@ cd server
 npm install
 ```
 
-คำสั่งนี้จะติดตั้ง Dependencies ที่จำเป็น รวมถึง Express
-
-ระบบจะสร้างโฟลเดอร์
-
-```text
-node_modules
-```
-
-และสร้างหรืออัปเดต
-
-```text
-package-lock.json
-```
+คำสั่งนี้จะติดตั้ง Dependencies ที่จำเป็น เช่น Express
 
 ## 5. Run Server
 
@@ -361,17 +345,23 @@ MoneyMate server running at http://localhost:3000
 http://localhost:3000
 ```
 
-Frontend จะถูก Serve ผ่าน Express จากโฟลเดอร์
+Frontend ถูก Serve ผ่าน Express จากโฟลเดอร์
 
 ```text
 public/
 ```
 
-เมื่อรันผ่าน Express แล้ว ไม่จำเป็นต้องใช้ Live Server
+เมื่อรันผ่าน Express แล้วไม่จำเป็นต้องใช้ Live Server
 
 ---
 
 # REST API
+
+Resource หลักของระบบคือ
+
+```text
+transactions
+```
 
 Base URL
 
@@ -422,7 +412,7 @@ Status
 
 ## GET Transaction by ID
 
-ใช้สำหรับค้นหา Transaction ตาม ID
+ใช้สำหรับดึง Transaction รายการเดียวด้วย ID
 
 ```http
 GET /api/transactions/:id
@@ -434,7 +424,7 @@ GET /api/transactions/:id
 GET /api/transactions/1
 ```
 
-เมื่อพบข้อมูล
+หากพบข้อมูล
 
 ```text
 200 OK
@@ -456,9 +446,9 @@ GET /api/transactions/1
 
 ---
 
-## Query String
+## Query String Filtering
 
-ระบบรองรับการ Filter Transaction ผ่าน Query String
+ระบบรองรับการกรองข้อมูลด้วย Query String
 
 ### Filter ตาม Type
 
@@ -478,12 +468,6 @@ GET /api/transactions?type=income
 GET /api/transactions?category=Food
 ```
 
-ตัวอย่าง
-
-```http
-GET /api/transactions?category=Shopping
-```
-
 ### Filter ตาม Month
 
 ```http
@@ -496,13 +480,27 @@ GET /api/transactions?month=9
 GET /api/transactions?year=2026
 ```
 
-สามารถใช้ Query String เพื่อให้ Server ส่งกลับเฉพาะ Transaction ที่ตรงกับเงื่อนไขที่กำหนด
+ตัวอย่างการกรองตาม Category
+
+```http
+GET /api/transactions?category=Food
+```
+
+ผลลัพธ์
+
+```text
+200 OK
+```
+
+ระบบจะส่งกลับเฉพาะ Transaction ที่มี Category เป็น `Food`
+
+![Query Filter](screenshots/query-filter.png)
 
 ---
 
 ## POST Transaction
 
-ใช้สำหรับสร้าง Transaction ใหม่
+ใช้สำหรับเพิ่ม Transaction ใหม่
 
 ```http
 POST /api/transactions
@@ -520,7 +518,7 @@ Request Body
 }
 ```
 
-หากสร้างสำเร็จ
+หากสำเร็จ
 
 ```text
 201 Created
@@ -543,7 +541,7 @@ Request Body
 
 ## PATCH Transaction
 
-ใช้สำหรับแก้ไขข้อมูลบางส่วนของ Transaction ตาม ID
+ใช้สำหรับแก้ไขข้อมูล Transaction ตาม ID
 
 ```http
 PATCH /api/transactions/:id
@@ -564,7 +562,7 @@ Request Body
 }
 ```
 
-หากแก้ไขสำเร็จ
+หากสำเร็จ
 
 ```text
 200 OK
@@ -615,9 +613,9 @@ Response จะไม่มี Body
 
 ---
 
-## Validation
+# Validation
 
-Backend จะตรวจสอบข้อมูลก่อนเพิ่มหรือแก้ไข Transaction
+Backend ตรวจสอบข้อมูลก่อนเพิ่มหรือแก้ไข Transaction
 
 ข้อมูลหลักประกอบด้วย
 
@@ -629,22 +627,14 @@ type
 date
 ```
 
-`amount` ต้องเป็นตัวเลขที่มากกว่า
+เงื่อนไขหลัก
 
 ```text
-0
-```
-
-`type` ต้องเป็น
-
-```text
-income
-```
-
-หรือ
-
-```text
-expense
+title ต้องไม่เป็นค่าว่าง
+amount ต้องเป็นตัวเลขมากกว่า 0
+category ต้องเป็น Category ที่ระบบรองรับ
+type ต้องเป็น income หรือ expense
+date ต้องอยู่ในรูปแบบ YYYY-MM-DD
 ```
 
 Category ที่รองรับ
@@ -659,17 +649,11 @@ Salary
 Other
 ```
 
-Date ใช้รูปแบบ
-
-```text
-YYYY-MM-DD
-```
-
 ---
 
-## Error Handling
+# Error Handling
 
-### 400 Bad Request
+## 400 Bad Request
 
 หากส่งข้อมูลไม่ครบ เช่น
 
@@ -685,7 +669,7 @@ Server จะตอบกลับ
 400 Bad Request
 ```
 
-พร้อม Response
+Response
 
 ```json
 {
@@ -693,15 +677,17 @@ Server จะตอบกลับ
 }
 ```
 
-### 404 Not Found
+---
 
-ตัวอย่าง Request
+## 404 Not Found
+
+ตัวอย่าง
 
 ```http
 GET /api/transactions/9999
 ```
 
-หากไม่มี Transaction ID ดังกล่าว ระบบจะตอบ
+หากไม่พบ Transaction ID ดังกล่าว
 
 ```text
 404 Not Found
@@ -733,15 +719,16 @@ Response
 
 REST API ถูกทดสอบด้วย Thunder Client
 
-ผลการทดสอบที่ผ่านแล้ว
+ผลการทดสอบ
 
 ```text
-GET       200 OK
-POST      201 Created
-PATCH     200 OK
-DELETE    204 No Content
-Invalid Request   400 Bad Request
-Unknown ID        404 Not Found
+GET                200 OK
+GET + Query String 200 OK
+POST               201 Created
+PATCH              200 OK
+DELETE             204 No Content
+Invalid Request    400 Bad Request
+Unknown ID         404 Not Found
 ```
 
 ---
@@ -772,7 +759,7 @@ Request
 POST http://localhost:3000/api/transactions
 ```
 
-ตัวอย่าง Request Body
+Request Body
 
 ```json
 {
@@ -802,7 +789,7 @@ Request
 PATCH http://localhost:3000/api/transactions/7
 ```
 
-ตัวอย่าง Request Body
+Request Body
 
 ```json
 {
@@ -841,7 +828,7 @@ DELETE http://localhost:3000/api/transactions/7
 
 ## 400 Validation Test
 
-ตัวอย่าง Request Body ที่ข้อมูลไม่ครบ
+Request Body
 
 ```json
 {
@@ -879,15 +866,15 @@ GET http://localhost:3000/api/transactions/9999
 
 # Frontend and Backend Connection
 
-Frontend ติดต่อ Backend ผ่าน Fetch API
+Frontend ติดต่อ Backend ด้วย Fetch API
 
-## GET Example
+## GET
 
 ```javascript
 fetch("/api/transactions");
 ```
 
-## POST Example
+## POST
 
 ```javascript
 fetch("/api/transactions", {
@@ -899,7 +886,7 @@ fetch("/api/transactions", {
 });
 ```
 
-## PATCH Example
+## PATCH
 
 ```javascript
 fetch(`/api/transactions/${id}`, {
@@ -911,7 +898,7 @@ fetch(`/api/transactions/${id}`, {
 });
 ```
 
-## DELETE Example
+## DELETE
 
 ```javascript
 fetch(`/api/transactions/${id}`, {
@@ -919,11 +906,13 @@ fetch(`/api/transactions/${id}`, {
 });
 ```
 
+Frontend สามารถอัปเดตรายการ Transaction โดยไม่ต้อง Refresh หน้าเว็บ
+
 ---
 
 # Transaction Data Storage
 
-ข้อมูล Transaction ถูกเก็บในไฟล์
+ข้อมูล Transaction ถูกจัดเก็บใน
 
 ```text
 server/transactions.json
@@ -944,13 +933,13 @@ server/transactions.json
 ]
 ```
 
-เมื่อเพิ่ม แก้ไข หรือลบ Transaction ระบบ Backend จะอัปเดตข้อมูลใน `transactions.json`
+เมื่อเพิ่ม แก้ไข หรือลบ Transaction ระบบ Backend จะอัปเดตไฟล์ `transactions.json`
 
 ---
 
 # LocalStorage
 
-LocalStorage ถูกใช้สำหรับข้อมูลและการตั้งค่าฝั่ง Client เช่น
+LocalStorage ใช้สำหรับข้อมูลหรือการตั้งค่าฝั่ง Client เช่น
 
 ```text
 Theme
@@ -970,7 +959,7 @@ moneyMateNotifications
 moneyMateDemoTransactions
 ```
 
-ข้อมูล Transaction หลักจะใช้ Backend และ `server/transactions.json` เมื่อ Server สามารถเชื่อมต่อได้
+Transaction หลักจะใช้ข้อมูลจาก Backend เมื่อ Server สามารถเชื่อมต่อได้
 
 ---
 
@@ -1019,9 +1008,15 @@ Goal Progress
 
 # User Interface
 
-MoneyMate ใช้แนวทางการออกแบบแบบ Modern FinTech Dashboard และ Glassmorphism
+MoneyMate ใช้แนวทางการออกแบบแบบ
 
-องค์ประกอบหลักของระบบประกอบด้วย
+```text
+Modern FinTech Dashboard
+Glassmorphism
+Responsive Design
+```
+
+องค์ประกอบหลักของระบบ
 
 ```text
 Dashboard
@@ -1031,8 +1026,6 @@ Budget & Goals
 Calendar
 Settings
 ```
-
-ระบบรองรับ Responsive Design สำหรับขนาดหน้าจอที่แตกต่างกัน
 
 Icons ภายในระบบใช้ Phosphor Icons แบบ Duotone
 
@@ -1044,7 +1037,7 @@ MoneyMate มี Theme จำนวน 4 รูปแบบ
 
 ## Cloud
 
-Light Theme สำหรับหน้าจอสว่าง
+Light Theme
 
 ## Midnight
 
@@ -1064,7 +1057,7 @@ Theme สามารถเปลี่ยนได้จาก
 Settings → Appearance
 ```
 
-Theme ที่ผู้ใช้เลือกจะถูกบันทึกใน LocalStorage
+Theme ที่เลือกจะถูกบันทึกใน LocalStorage
 
 ---
 
@@ -1076,9 +1069,9 @@ Theme ที่ผู้ใช้เลือกจะถูกบันทึ�
 /api/transactions
 ```
 
-ระบบสามารถใช้ Demo Data จาก LocalStorage เพื่อให้สามารถทดสอบ Frontend ได้
+ระบบสามารถใช้ Demo Data จาก LocalStorage เพื่อทดสอบ Frontend ได้
 
-เมื่อเชื่อมต่อ Express Server สำเร็จ ระบบจะใช้ข้อมูล Transaction จาก
+เมื่อ Express Server ทำงานตามปกติ ระบบจะใช้ข้อมูลจาก
 
 ```text
 server/transactions.json
@@ -1096,25 +1089,28 @@ https://github.com/Yin-Yew/Mini-project-MoneyMate
 
 # Report
 
-เอกสารรายงานโปรเจกต์จัดเก็บไว้ในไฟล์
+เอกสารรายงานการออกแบบและทดสอบ REST API จัดเก็บไว้ใน
 
 ```text
 report.pdf
 ```
 
-เนื้อหารายงานประกอบด้วย
+รายงานประกอบด้วย
 
 ```text
 Introduction
 Objectives
+System Scope
 System Design
 Project Structure
 Frontend Design
 Backend Design
-REST API
+REST API Design
+Query String
+Validation
+HTTP Status Codes
 API Testing
-Error Handling
-Screenshots
+Website Screenshots
 Conclusion
 ```
 
@@ -1122,17 +1118,26 @@ Conclusion
 
 # Conclusion
 
-MoneyMate เป็น Full-Stack Personal Finance Tracker ที่ช่วยให้ผู้ใช้สามารถจัดการข้อมูลรายรับและรายจ่ายผ่านเว็บแอปพลิเคชันได้
+MoneyMate เป็น Full-Stack Personal Finance Tracker สำหรับจัดการข้อมูลรายรับและรายจ่ายส่วนบุคคล
 
-ระบบรองรับการเพิ่ม แก้ไข ลบ ค้นหา และ Filter Transaction พร้อมเชื่อมต่อ Frontend กับ Backend ผ่าน REST API
+ระบบรองรับ CRUD ผ่าน REST API ได้แก่
 
-ข้อมูล Transaction ถูกจัดเก็บใน `server/transactions.json` และสามารถเรียกใช้งานผ่าน HTTP Methods ได้แก่ GET, POST, PATCH และ DELETE
+```text
+GET
+POST
+PATCH
+DELETE
+```
 
-ระบบยังแสดงข้อมูลในรูปแบบ Dashboard, Charts, Analytics และ Calendar เพื่อช่วยให้ผู้ใช้มองเห็นภาพรวมทางการเงินได้ง่ายขึ้น
+รวมถึงรองรับ Query String สำหรับกรองข้อมูล Transaction
 
-นอกจากนี้ยังมีระบบ Budget & Goals สำหรับสร้างเป้าหมายการออม เพิ่มเงินเข้าเป้าหมายเดิม และติดตามความคืบหน้าผ่าน Progress Bar
+Frontend ติดต่อกับ Backend ผ่าน Fetch API และสามารถเพิ่ม แก้ไข ลบ และแสดงข้อมูลใหม่ได้โดยไม่ต้อง Refresh หน้าเว็บ
 
-โปรเจกต์นี้แสดงการประยุกต์ใช้ความรู้เกี่ยวกับ
+ข้อมูล Transaction ถูกจัดเก็บใน `server/transactions.json`
+
+นอกจากนี้ระบบยังมี Dashboard, Analytics, Calendar, Budget & Goals และ Settings เพื่อเพิ่มความสะดวกในการใช้งานและช่วยให้ผู้ใช้เห็นภาพรวมทางการเงินได้ชัดเจนมากขึ้น
+
+โปรเจกต์นี้เป็นการประยุกต์ใช้ความรู้เกี่ยวกับ
 
 ```text
 HTML
@@ -1143,8 +1148,8 @@ Express.js
 REST API
 HTTP Methods
 JSON
-LocalStorage
 Fetch API
+LocalStorage
 Chart.js
 Git
 GitHub
