@@ -1,1 +1,22 @@
+{
+  "name": "moneymate-server",
+  "version": "1.0.0",
+  "description": "Backend REST API for MoneyMate Personal Finance Tracker",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node app.js"
+  },
+  "keywords": [
+    "moneymate",
+    "finance",
+    "express",
+    "rest-api"
+  ],
+  "author": "MoneyMate Team",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
 
