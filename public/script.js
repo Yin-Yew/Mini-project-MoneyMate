@@ -1,220 +1,207 @@
 let transactionsData = [];
-
 let dashboardTransactions = [];
-
 let analyticsTransactions = [];
 
 let currentEditId = null;
-
 let demoMode = false;
 
 let dashboardExpenseChart = null;
-
 let dashboardYearChart = null;
-
 let analyticsCategoryChart = null;
-
 let analyticsTrendChart = null;
 
 let calendarDate = new Date();
-
 let selectedCalendarDate = null;
 
 let modalTransactionType = "expense";
 
+let selectedGoalId = null;
+
 let goals =
-JSON.parse(
-    localStorage.getItem("goals")
-) || [];
+    JSON.parse(
+        localStorage.getItem("goals")
+    ) || [];
 
 
 const themes = {
 
     cloud: {
-
         bg:
-        "linear-gradient(135deg,#dbeafe 0%,#f8fafc 45%,#ede9fe 100%)",
+            "linear-gradient(135deg,#dbeafe 0%,#f8fafc 45%,#ede9fe 100%)",
 
         glass:
-        "rgba(255,255,255,.58)",
+            "rgba(255,255,255,.58)",
 
         glassStrong:
-        "rgba(255,255,255,.78)",
+            "rgba(255,255,255,.78)",
 
         border:
-        "rgba(255,255,255,.86)",
+            "rgba(255,255,255,.86)",
 
         text:
-        "#172033",
+            "#172033",
 
         subtext:
-        "#64748b",
+            "#64748b",
 
         primary:
-        "#6366f1",
+            "#6366f1",
 
         surface:
-        "rgba(255,255,255,.45)",
+            "rgba(255,255,255,.45)",
 
         surfaceHover:
-        "rgba(255,255,255,.72)",
+            "rgba(255,255,255,.72)",
 
         input:
-        "rgba(255,255,255,.68)",
+            "rgba(255,255,255,.68)",
 
         optionBg:
-        "#ffffff",
+            "#ffffff",
 
         optionText:
-        "#172033",
+            "#172033",
 
         shadow:
-        "rgba(71,85,105,.18)",
+            "rgba(71,85,105,.18)",
 
         grid:
-        "rgba(71,85,105,.12)"
-
+            "rgba(71,85,105,.12)"
     },
 
 
     midnight: {
-
         bg:
-        "linear-gradient(135deg,#020617 0%,#071426 48%,#10244c 100%)",
+            "linear-gradient(135deg,#020617 0%,#071426 48%,#10244c 100%)",
 
         glass:
-        "rgba(10,22,45,.48)",
+            "rgba(10,22,45,.48)",
 
         glassStrong:
-        "rgba(14,30,58,.74)",
+            "rgba(14,30,58,.74)",
 
         border:
-        "rgba(148,163,184,.18)",
+            "rgba(148,163,184,.18)",
 
         text:
-        "#f8fafc",
+            "#f8fafc",
 
         subtext:
-        "#94a3b8",
+            "#94a3b8",
 
         primary:
-        "#60a5fa",
+            "#60a5fa",
 
         surface:
-        "rgba(255,255,255,.07)",
+            "rgba(255,255,255,.07)",
 
         surfaceHover:
-        "rgba(96,165,250,.14)",
+            "rgba(96,165,250,.14)",
 
         input:
-        "rgba(15,23,42,.50)",
+            "rgba(15,23,42,.50)",
 
         optionBg:
-        "#0f172a",
+            "#0f172a",
 
         optionText:
-        "#f8fafc",
+            "#f8fafc",
 
         shadow:
-        "rgba(0,0,0,.42)",
+            "rgba(0,0,0,.42)",
 
         grid:
-        "rgba(148,163,184,.10)"
-
+            "rgba(148,163,184,.10)"
     },
 
 
     forest: {
-
         bg:
-        "linear-gradient(135deg,#001a13 0%,#063126 48%,#0a4632 100%)",
+            "linear-gradient(135deg,#001a13 0%,#063126 48%,#0a4632 100%)",
 
         glass:
-        "rgba(8,36,29,.50)",
+            "rgba(8,36,29,.50)",
 
         glassStrong:
-        "rgba(7,45,35,.78)",
+            "rgba(7,45,35,.78)",
 
         border:
-        "rgba(209,250,229,.22)",
+            "rgba(209,250,229,.22)",
 
         text:
-        "#F7FFF9",
+            "#F7FFF9",
 
         subtext:
-        "#D1FAE5",
+            "#D1FAE5",
 
         primary:
-        "#5EE7A1",
+            "#5EE7A1",
 
         surface:
-        "rgba(0,0,0,.12)",
+            "rgba(0,0,0,.12)",
 
         surfaceHover:
-        "rgba(94,231,161,.13)",
+            "rgba(94,231,161,.13)",
 
         input:
-        "rgba(2,24,20,.58)",
+            "rgba(2,24,20,.58)",
 
         optionBg:
-        "#032c22",
+            "#032c22",
 
         optionText:
-        "#F7FFF9",
+            "#F7FFF9",
 
         shadow:
-        "rgba(0,0,0,.46)",
+            "rgba(0,0,0,.46)",
 
         grid:
-        "rgba(209,250,229,.12)"
-
+            "rgba(209,250,229,.12)"
     },
 
 
     lavender: {
-
         bg:
-        "linear-gradient(135deg,#28113f 0%,#56265f 46%,#9d416d 100%)",
+            "linear-gradient(135deg,#28113f 0%,#56265f 46%,#9d416d 100%)",
 
         glass:
-        "rgba(70,32,82,.42)",
+            "rgba(70,32,82,.42)",
 
         glassStrong:
-        "rgba(91,42,101,.74)",
+            "rgba(91,42,101,.74)",
 
         border:
-        "rgba(251,207,232,.20)",
+            "rgba(251,207,232,.20)",
 
         text:
-        "#fff7fc",
+            "#fff7fc",
 
         subtext:
-        "#f5d0fe",
+            "#f5d0fe",
 
         primary:
-        "#f0abfc",
+            "#f0abfc",
 
         surface:
-        "rgba(255,255,255,.08)",
+            "rgba(255,255,255,.08)",
 
         surfaceHover:
-        "rgba(240,171,252,.15)",
+            "rgba(240,171,252,.15)",
 
         input:
-        "rgba(66,29,78,.48)",
+            "rgba(66,29,78,.48)",
 
         optionBg:
-        "#3b1746",
+            "#3b1746",
 
         optionText:
-        "#fff7fc",
+            "#fff7fc",
 
         shadow:
-        "rgba(31,8,37,.42)",
+            "rgba(31,8,37,.42)",
 
         grid:
-        "rgba(251,207,232,.10)"
-
+            "rgba(251,207,232,.10)"
     }
 
 };
@@ -225,78 +212,6 @@ const demoTransactions = [
     {
         id: 1,
         title: "Salary",
-        amount: 30000,
-        category: "Salary",
-        type: "income",
-        date: "2026-01-01"
-    },
-
-    {
-        id: 2,
-        title: "Groceries",
-        amount: 2800,
-        category: "Food",
-        type: "expense",
-        date: "2026-01-10"
-    },
-
-    {
-        id: 3,
-        title: "Salary",
-        amount: 32000,
-        category: "Salary",
-        type: "income",
-        date: "2026-02-01"
-    },
-
-    {
-        id: 4,
-        title: "Shopping",
-        amount: 4200,
-        category: "Shopping",
-        type: "expense",
-        date: "2026-02-18"
-    },
-
-    {
-        id: 5,
-        title: "Salary",
-        amount: 33000,
-        category: "Salary",
-        type: "income",
-        date: "2026-03-01"
-    },
-
-    {
-        id: 6,
-        title: "Internet",
-        amount: 699,
-        category: "Bills",
-        type: "expense",
-        date: "2026-03-10"
-    },
-
-    {
-        id: 7,
-        title: "Salary",
-        amount: 35000,
-        category: "Salary",
-        type: "income",
-        date: "2026-04-01"
-    },
-
-    {
-        id: 8,
-        title: "Concert",
-        amount: 3500,
-        category: "Entertainment",
-        type: "expense",
-        date: "2026-04-22"
-    },
-
-    {
-        id: 9,
-        title: "Salary",
         amount: 35000,
         category: "Salary",
         type: "income",
@@ -304,7 +219,7 @@ const demoTransactions = [
     },
 
     {
-        id: 10,
+        id: 2,
         title: "Internet",
         amount: 699,
         category: "Bills",
@@ -313,7 +228,7 @@ const demoTransactions = [
     },
 
     {
-        id: 11,
+        id: 3,
         title: "Shopping",
         amount: 1250,
         category: "Shopping",
@@ -322,7 +237,7 @@ const demoTransactions = [
     },
 
     {
-        id: 12,
+        id: 4,
         title: "Taxi",
         amount: 240,
         category: "Transport",
@@ -331,7 +246,7 @@ const demoTransactions = [
     },
 
     {
-        id: 13,
+        id: 5,
         title: "Coffee",
         amount: 80,
         category: "Food",
@@ -340,7 +255,7 @@ const demoTransactions = [
     },
 
     {
-        id: 14,
+        id: 6,
         title: "Dinner",
         amount: 720,
         category: "Food",
@@ -354,105 +269,87 @@ const demoTransactions = [
 function changeTheme(themeName) {
 
     const theme =
-    themes[themeName];
-
+        themes[themeName];
 
     if (!theme) {
         return;
     }
 
-
     const root =
-    document.documentElement;
-
+        document.documentElement;
 
     root.style.setProperty(
         "--bg",
         theme.bg
     );
 
-
     root.style.setProperty(
         "--glass",
         theme.glass
     );
-
 
     root.style.setProperty(
         "--glass-strong",
         theme.glassStrong
     );
 
-
     root.style.setProperty(
         "--glass-border",
         theme.border
     );
-
 
     root.style.setProperty(
         "--text",
         theme.text
     );
 
-
     root.style.setProperty(
         "--subtext",
         theme.subtext
     );
-
 
     root.style.setProperty(
         "--primary",
         theme.primary
     );
 
-
     root.style.setProperty(
         "--surface",
         theme.surface
     );
-
 
     root.style.setProperty(
         "--surface-hover",
         theme.surfaceHover
     );
 
-
     root.style.setProperty(
         "--input-bg",
         theme.input
     );
-
 
     root.style.setProperty(
         "--option-bg",
         theme.optionBg
     );
 
-
     root.style.setProperty(
         "--option-text",
         theme.optionText
     );
-
 
     root.style.setProperty(
         "--shadow",
         theme.shadow
     );
 
-
     root.style.setProperty(
         "--chart-grid",
         theme.grid
     );
 
-
     document.body.dataset.theme =
-    themeName;
-
+        themeName;
 
     localStorage.setItem(
         "theme",
@@ -461,7 +358,8 @@ function changeTheme(themeName) {
 
 
     if (
-        typeof Chart !== "undefined"
+        typeof Chart !==
+        "undefined"
     ) {
 
         setTimeout(
@@ -504,11 +402,11 @@ function changeTheme(themeName) {
 function escapeHTML(value) {
 
     return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 
 }
 
@@ -516,13 +414,13 @@ function escapeHTML(value) {
 function formatMoney(value) {
 
     return Number(value)
-    .toLocaleString(
-        "en-US",
-        {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2
-        }
-    );
+        .toLocaleString(
+            "en-US",
+            {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+            }
+        );
 
 }
 
@@ -533,12 +431,10 @@ function formatTransactionDate(value) {
         return "";
     }
 
-
     const date =
-    new Date(
-        `${value}T00:00:00`
-    );
-
+        new Date(
+            `${value}T00:00:00`
+        );
 
     return date.toLocaleDateString(
         "en-US",
@@ -552,33 +448,71 @@ function formatTransactionDate(value) {
 }
 
 
+function formatLocalDate(
+    year,
+    month,
+    day
+) {
+
+    const m =
+        String(month + 1)
+            .padStart(
+                2,
+                "0"
+            );
+
+    const d =
+        String(day)
+            .padStart(
+                2,
+                "0"
+            );
+
+    return `${year}-${m}-${d}`;
+
+}
+
+
+function getTodayString() {
+
+    const now =
+        new Date();
+
+    return formatLocalDate(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()
+    );
+
+}
+
+
 function getCategoryIcon(category) {
 
     const icons = {
 
         Food:
-        "ph-duotone ph-fork-knife",
+            "ph-duotone ph-fork-knife",
 
         Transport:
-        "ph-duotone ph-car",
+            "ph-duotone ph-car",
 
         Shopping:
-        "ph-duotone ph-shopping-bag",
+            "ph-duotone ph-shopping-bag",
 
         Bills:
-        "ph-duotone ph-receipt",
+            "ph-duotone ph-receipt",
 
         Entertainment:
-        "ph-duotone ph-game-controller",
+            "ph-duotone ph-game-controller",
 
         Salary:
-        "ph-duotone ph-briefcase",
+            "ph-duotone ph-briefcase",
 
         Other:
-        "ph-duotone ph-wallet"
+            "ph-duotone ph-wallet"
 
     };
-
 
     return (
         icons[category] ||
@@ -591,16 +525,17 @@ function getCategoryIcon(category) {
 function getDemoTransactions() {
 
     const saved =
-    localStorage.getItem(
-        "moneyMateDemoTransactions"
-    );
-
+        localStorage.getItem(
+            "moneyMateDemoTransactions"
+        );
 
     if (saved) {
 
         try {
 
-            return JSON.parse(saved);
+            return JSON.parse(
+                saved
+            );
 
         } catch (error) {
 
@@ -612,14 +547,12 @@ function getDemoTransactions() {
 
     }
 
-
     localStorage.setItem(
         "moneyMateDemoTransactions",
         JSON.stringify(
             demoTransactions
         )
     );
-
 
     return [
         ...demoTransactions
@@ -645,10 +578,9 @@ async function fetchTransactions() {
     try {
 
         const response =
-        await fetch(
-            "/api/transactions"
-        );
-
+            await fetch(
+                "/api/transactions"
+            );
 
         if (!response.ok) {
 
@@ -658,26 +590,22 @@ async function fetchTransactions() {
 
         }
 
-
         const data =
-        await response.json();
-
+            await response.json();
 
         return {
             data,
             demo: false
         };
 
-
     } catch (error) {
 
         return {
-
             data:
-            getDemoTransactions(),
+                getDemoTransactions(),
 
-            demo: true
-
+            demo:
+                true
         };
 
     }
@@ -688,47 +616,49 @@ async function fetchTransactions() {
 function calculateSummary(data) {
 
     const income =
-    data
-    .filter(
-        item =>
-        item.type === "income"
-    )
-    .reduce(
-        (sum,item) =>
-        sum + Number(item.amount),
-        0
-    );
+        data
+            .filter(
+                item =>
+                    item.type === "income"
+            )
+            .reduce(
+                (sum, item) =>
+                    sum +
+                    Number(item.amount),
+                0
+            );
 
 
     const expense =
-    data
-    .filter(
-        item =>
-        item.type === "expense"
-    )
-    .reduce(
-        (sum,item) =>
-        sum + Number(item.amount),
-        0
-    );
+        data
+            .filter(
+                item =>
+                    item.type === "expense"
+            )
+            .reduce(
+                (sum, item) =>
+                    sum +
+                    Number(item.amount),
+                0
+            );
 
 
     const balance =
-    income - expense;
+        income - expense;
 
 
     const savingRate =
-    income > 0
-    ? Math.max(
-        0,
-        Math.round(
-            (
-                balance /
-                income
-            ) * 100
-        )
-    )
-    : 0;
+        income > 0
+            ? Math.max(
+                0,
+                Math.round(
+                    (
+                        balance /
+                        income
+                    ) * 100
+                )
+            )
+            : 0;
 
 
     return {
@@ -744,10 +674,9 @@ function calculateSummary(data) {
 async function loadDashboard() {
 
     const balanceElement =
-    document.getElementById(
-        "dashboardBalance"
-    );
-
+        document.getElementById(
+            "dashboardBalance"
+        );
 
     if (!balanceElement) {
         return;
@@ -755,41 +684,41 @@ async function loadDashboard() {
 
 
     const result =
-    await fetchTransactions();
+        await fetchTransactions();
 
 
     dashboardTransactions =
-    result.data;
+        result.data;
 
 
     const summary =
-    calculateSummary(
-        dashboardTransactions
-    );
+        calculateSummary(
+            dashboardTransactions
+        );
 
 
     document.getElementById(
         "dashboardBalance"
     ).textContent =
-    `฿${formatMoney(summary.balance)}`;
+        `฿${formatMoney(summary.balance)}`;
 
 
     document.getElementById(
         "dashboardIncome"
     ).textContent =
-    `฿${formatMoney(summary.income)}`;
+        `฿${formatMoney(summary.income)}`;
 
 
     document.getElementById(
         "dashboardExpense"
     ).textContent =
-    `฿${formatMoney(summary.expense)}`;
+        `฿${formatMoney(summary.expense)}`;
 
 
     document.getElementById(
         "dashboardSavingRate"
     ).textContent =
-    `${summary.savingRate}%`;
+        `${summary.savingRate}%`;
 
 
     renderDashboardRecent(
@@ -807,10 +736,9 @@ async function loadDashboard() {
 function renderDashboardRecent(data) {
 
     const container =
-    document.getElementById(
-        "dashboardRecentTransactions"
-    );
-
+        document.getElementById(
+            "dashboardRecentTransactions"
+        );
 
     if (!container) {
         return;
@@ -818,13 +746,16 @@ function renderDashboardRecent(data) {
 
 
     const sorted =
-    [...data]
-    .sort(
-        (a,b) =>
-        new Date(b.date) -
-        new Date(a.date)
-    )
-    .slice(0,5);
+        [...data]
+            .sort(
+                (a, b) =>
+                    new Date(b.date) -
+                    new Date(a.date)
+            )
+            .slice(
+                0,
+                5
+            );
 
 
     if (!sorted.length) {
@@ -847,53 +778,58 @@ function renderDashboardRecent(data) {
 
 
     container.innerHTML =
-    sorted.map(
-        item => {
+        sorted.map(
+            item => {
 
-            const sign =
-            item.type === "income"
-            ? "+"
-            : "-";
+                const sign =
+                    item.type ===
+                    "income"
+                        ? "+"
+                        : "-";
 
 
-            return `
+                return `
 
-            <div class="transaction-item">
+                <div class="transaction-item">
 
-                <div class="transaction-icon">
+                    <div class="transaction-icon">
 
-                    <i class="${getCategoryIcon(item.category)}"></i>
+                        <i class="${getCategoryIcon(item.category)}"></i>
+
+                    </div>
+
+
+                    <div class="transaction-info">
+
+                        <b>
+                            ${escapeHTML(item.title)}
+                        </b>
+
+                        <p>
+
+                            ${escapeHTML(item.category)}
+
+                            <span>•</span>
+
+                            ${formatTransactionDate(item.date)}
+
+                        </p>
+
+                    </div>
+
+
+                    <strong class="${item.type}">
+
+                        ${sign}฿${formatMoney(item.amount)}
+
+                    </strong>
 
                 </div>
 
+                `;
 
-                <div class="transaction-info">
-
-                    <b>
-                        ${escapeHTML(item.title)}
-                    </b>
-
-                    <p>
-                        ${escapeHTML(item.category)}
-                        <span>•</span>
-                        ${formatTransactionDate(item.date)}
-                    </p>
-
-                </div>
-
-
-                <strong class="${item.type}">
-
-                    ${sign}฿${formatMoney(item.amount)}
-
-                </strong>
-
-            </div>
-
-            `;
-
-        }
-    ).join("");
+            }
+        ).join("");
 
 }
 
@@ -901,40 +837,40 @@ function renderDashboardRecent(data) {
 function getChartTheme() {
 
     const styles =
-    getComputedStyle(
-        document.documentElement
-    );
+        getComputedStyle(
+            document.documentElement
+        );
 
 
     return {
 
         text:
-        styles
-        .getPropertyValue(
-            "--text"
-        )
-        .trim(),
+            styles
+                .getPropertyValue(
+                    "--text"
+                )
+                .trim(),
 
         subtext:
-        styles
-        .getPropertyValue(
-            "--subtext"
-        )
-        .trim(),
+            styles
+                .getPropertyValue(
+                    "--subtext"
+                )
+                .trim(),
 
         primary:
-        styles
-        .getPropertyValue(
-            "--primary"
-        )
-        .trim(),
+            styles
+                .getPropertyValue(
+                    "--primary"
+                )
+                .trim(),
 
         grid:
-        styles
-        .getPropertyValue(
-            "--chart-grid"
-        )
-        .trim()
+            styles
+                .getPropertyValue(
+                    "--chart-grid"
+                )
+                .trim()
 
     };
 
@@ -943,7 +879,8 @@ function getChartTheme() {
 
 const donutCenterPlugin = {
 
-    id: "donutCenter",
+    id:
+        "donutCenter",
 
 
     afterDraw(chart) {
@@ -952,64 +889,60 @@ const donutCenterPlugin = {
             chart.config.type !==
             "doughnut"
         ) {
-
             return;
-
         }
 
 
         const meta =
-        chart.getDatasetMeta(0);
+            chart.getDatasetMeta(0);
 
 
-        if (!meta.data.length) {
+        if (
+            !meta.data.length
+        ) {
             return;
         }
 
 
         const theme =
-        getChartTheme();
+            getChartTheme();
 
 
         const total =
-        chart.data.datasets[0].data
-        .reduce(
-            (sum,value) =>
-            sum + Number(value),
-            0
-        );
+            chart.data.datasets[0].data
+                .reduce(
+                    (sum, value) =>
+                        sum +
+                        Number(value),
+                    0
+                );
 
 
         const centerX =
-        meta.data[0].x;
+            meta.data[0].x;
 
 
         const centerY =
-        meta.data[0].y;
+            meta.data[0].y;
 
 
         const ctx =
-        chart.ctx;
+            chart.ctx;
 
 
         ctx.save();
 
-
         ctx.textAlign =
-        "center";
-
+            "center";
 
         ctx.textBaseline =
-        "middle";
-
+            "middle";
 
         ctx.fillStyle =
-        theme.subtext;
-
+            theme.subtext;
 
         ctx.font =
-        "600 11px Inter, sans-serif";
-
+            "600 11px Inter, sans-serif";
 
         ctx.fillText(
             "TOTAL",
@@ -1017,21 +950,17 @@ const donutCenterPlugin = {
             centerY - 16
         );
 
-
         ctx.fillStyle =
-        theme.text;
-
+            theme.text;
 
         ctx.font =
-        "700 21px Inter, sans-serif";
-
+            "700 21px Inter, sans-serif";
 
         ctx.fillText(
             `฿${formatMoney(total)}`,
             centerX,
             centerY + 8
         );
-
 
         ctx.restore();
 
@@ -1046,22 +975,23 @@ function getExpenseCategories(data) {
 
 
     data
-    .filter(
-        item =>
-        item.type === "expense"
-    )
-    .forEach(
-        item => {
+        .filter(
+            item =>
+                item.type ===
+                "expense"
+        )
+        .forEach(
+            item => {
 
-            totals[item.category] =
-            (
-                totals[item.category] ||
-                0
-            ) +
-            Number(item.amount);
+                totals[item.category] =
+                    (
+                        totals[item.category] ||
+                        0
+                    ) +
+                    Number(item.amount);
 
-        }
-    );
+            }
+        );
 
 
     return totals;
@@ -1069,44 +999,44 @@ function getExpenseCategories(data) {
 }
 
 
-function createDashboardCharts(data = []) {
+function createDashboardCharts(
+    data = []
+) {
 
     if (
         typeof Chart ===
         "undefined"
     ) {
-
         return;
-
     }
 
 
     const expenseCanvas =
-    document.getElementById(
-        "expenseChart"
-    );
+        document.getElementById(
+            "expenseChart"
+        );
 
 
     const yearCanvas =
-    document.getElementById(
-        "yearChart"
-    );
+        document.getElementById(
+            "yearChart"
+        );
 
 
     const theme =
-    getChartTheme();
+        getChartTheme();
 
 
     const currentTheme =
-    document.body.dataset.theme;
+        document.body.dataset.theme;
 
 
     let incomeChartColor =
-    "#34D399";
+        "#34D399";
 
 
     let expenseChartColor =
-    theme.primary;
+        theme.primary;
 
 
     if (
@@ -1115,10 +1045,10 @@ function createDashboardCharts(data = []) {
     ) {
 
         incomeChartColor =
-        "#86EFAC";
+            "#86EFAC";
 
         expenseChartColor =
-        "#FDA4AF";
+            "#FDA4AF";
 
     }
 
@@ -1129,10 +1059,10 @@ function createDashboardCharts(data = []) {
     ) {
 
         incomeChartColor =
-        "#10B981";
+            "#10B981";
 
         expenseChartColor =
-        "#6366F1";
+            "#6366F1";
 
     }
 
@@ -1143,10 +1073,10 @@ function createDashboardCharts(data = []) {
     ) {
 
         incomeChartColor =
-        "#34D399";
+            "#34D399";
 
         expenseChartColor =
-        "#60A5FA";
+            "#60A5FA";
 
     }
 
@@ -1157,30 +1087,30 @@ function createDashboardCharts(data = []) {
     ) {
 
         incomeChartColor =
-        "#6EE7B7";
+            "#6EE7B7";
 
         expenseChartColor =
-        "#F9A8D4";
+            "#F9A8D4";
 
     }
 
 
     const categoryTotals =
-    getExpenseCategories(
-        data
-    );
+        getExpenseCategories(
+            data
+        );
 
 
     const labels =
-    Object.keys(
-        categoryTotals
-    );
+        Object.keys(
+            categoryTotals
+        );
 
 
     const values =
-    Object.values(
-        categoryTotals
-    );
+        Object.values(
+            categoryTotals
+        );
 
 
     const chartColors = [
@@ -1198,7 +1128,9 @@ function createDashboardCharts(data = []) {
 
     if (expenseCanvas) {
 
-        if (dashboardExpenseChart) {
+        if (
+            dashboardExpenseChart
+        ) {
 
             dashboardExpenseChart.destroy();
 
@@ -1206,94 +1138,97 @@ function createDashboardCharts(data = []) {
 
 
         dashboardExpenseChart =
-        new Chart(
-            expenseCanvas,
-            {
+            new Chart(
+                expenseCanvas,
+                {
 
-                type:
-                "doughnut",
+                    type:
+                        "doughnut",
 
-                plugins: [
-                    donutCenterPlugin
-                ],
+                    plugins: [
+                        donutCenterPlugin
+                    ],
 
-                data: {
+                    data: {
 
-                    labels,
+                        labels,
 
-                    datasets: [
-                        {
+                        datasets: [
+                            {
 
-                            data:
-                            values,
+                                data:
+                                    values,
 
-                            backgroundColor:
-                            chartColors,
+                                backgroundColor:
+                                    chartColors,
 
-                            borderWidth:
-                            0,
+                                borderWidth:
+                                    0,
 
-                            hoverOffset:
-                            7,
+                                hoverOffset:
+                                    7,
 
-                            spacing:
-                            3,
+                                spacing:
+                                    3,
 
-                            borderRadius:
-                            8
+                                borderRadius:
+                                    8
 
-                        }
-                    ]
+                            }
+                        ]
 
-                },
+                    },
 
 
-                options: {
+                    options: {
 
-                    responsive:
-                    true,
+                        responsive:
+                            true,
 
-                    maintainAspectRatio:
-                    false,
+                        maintainAspectRatio:
+                            false,
 
-                    cutout:
-                    "73%",
+                        cutout:
+                            "73%",
 
-                    plugins: {
+                        plugins: {
 
-                        legend: {
-                            display: false
-                        },
+                            legend: {
+                                display:
+                                    false
+                            },
 
-                        tooltip: {
+                            tooltip: {
 
-                            padding:
-                            13,
+                                padding:
+                                    13,
 
-                            cornerRadius:
-                            12,
+                                cornerRadius:
+                                    12,
 
-                            backgroundColor:
-                            "rgba(15,23,42,.92)",
+                                backgroundColor:
+                                    "rgba(15,23,42,.92)",
 
-                            titleColor:
-                            "#fff",
+                                titleColor:
+                                    "#fff",
 
-                            bodyColor:
-                            "#e2e8f0",
+                                bodyColor:
+                                    "#e2e8f0",
 
-                            callbacks: {
+                                callbacks: {
 
-                                label(context) {
+                                    label(context) {
 
-                                    return (
-                                        " " +
-                                        context.label +
-                                        ": ฿" +
-                                        formatMoney(
-                                            context.raw
-                                        )
-                                    );
+                                        return (
+                                            " " +
+                                            context.label +
+                                            ": ฿" +
+                                            formatMoney(
+                                                context.raw
+                                            )
+                                        );
+
+                                    }
 
                                 }
 
@@ -1304,9 +1239,7 @@ function createDashboardCharts(data = []) {
                     }
 
                 }
-
-            }
-        );
+            );
 
 
         renderExpenseLegend(
@@ -1320,7 +1253,9 @@ function createDashboardCharts(data = []) {
 
     if (yearCanvas) {
 
-        if (dashboardYearChart) {
+        if (
+            dashboardYearChart
+        ) {
 
             dashboardYearChart.destroy();
 
@@ -1328,24 +1263,26 @@ function createDashboardCharts(data = []) {
 
 
         const incomeMonthly =
-        new Array(12).fill(0);
+            new Array(12)
+                .fill(0);
 
 
         const expenseMonthly =
-        new Array(12).fill(0);
+            new Array(12)
+                .fill(0);
 
 
         data.forEach(
             item => {
 
                 const date =
-                new Date(
-                    `${item.date}T00:00:00`
-                );
+                    new Date(
+                        `${item.date}T00:00:00`
+                    );
 
 
                 const month =
-                date.getMonth();
+                    date.getMonth();
 
 
                 if (
@@ -1354,12 +1291,12 @@ function createDashboardCharts(data = []) {
                 ) {
 
                     incomeMonthly[month] +=
-                    Number(item.amount);
+                        Number(item.amount);
 
                 } else {
 
                     expenseMonthly[month] +=
-                    Number(item.amount);
+                        Number(item.amount);
 
                 }
 
@@ -1368,204 +1305,210 @@ function createDashboardCharts(data = []) {
 
 
         dashboardYearChart =
-        new Chart(
-            yearCanvas,
-            {
+            new Chart(
+                yearCanvas,
+                {
 
-                type:
-                "bar",
+                    type:
+                        "bar",
 
-                data: {
+                    data: {
 
-                    labels: [
-                        "Jan",
-                        "Feb",
-                        "Mar",
-                        "Apr",
-                        "May",
-                        "Jun",
-                        "Jul",
-                        "Aug",
-                        "Sep",
-                        "Oct",
-                        "Nov",
-                        "Dec"
-                    ],
+                        labels: [
+                            "Jan",
+                            "Feb",
+                            "Mar",
+                            "Apr",
+                            "May",
+                            "Jun",
+                            "Jul",
+                            "Aug",
+                            "Sep",
+                            "Oct",
+                            "Nov",
+                            "Dec"
+                        ],
 
-                    datasets: [
+                        datasets: [
 
-                        {
+                            {
 
-                            label:
-                            "Income",
+                                label:
+                                    "Income",
 
-                            data:
-                            incomeMonthly,
+                                data:
+                                    incomeMonthly,
 
-                            backgroundColor:
-                            incomeChartColor,
+                                backgroundColor:
+                                    incomeChartColor,
 
-                            borderRadius:
-                            9,
+                                borderRadius:
+                                    9,
 
-                            borderSkipped:
-                            false
+                                borderSkipped:
+                                    false
 
-                        },
+                            },
 
-                        {
+                            {
 
-                            label:
-                            "Expense",
+                                label:
+                                    "Expense",
 
-                            data:
-                            expenseMonthly,
+                                data:
+                                    expenseMonthly,
 
-                            backgroundColor:
-                            expenseChartColor,
+                                backgroundColor:
+                                    expenseChartColor,
 
-                            borderRadius:
-                            9,
+                                borderRadius:
+                                    9,
 
-                            borderSkipped:
-                            false
-
-                        }
-
-                    ]
-
-                },
-
-
-                options: {
-
-                    responsive:
-                    true,
-
-                    maintainAspectRatio:
-                    false,
-
-                    interaction: {
-                        mode: "index",
-                        intersect: false
-                    },
-
-                    plugins: {
-
-                        legend: {
-
-                            position:
-                            "top",
-
-                            align:
-                            "end",
-
-                            labels: {
-
-                                color:
-                                theme.text,
-
-                                usePointStyle:
-                                true,
-
-                                pointStyle:
-                                "circle",
-
-                                padding:
-                                18,
-
-                                boxWidth:
-                                9,
-
-                                boxHeight:
-                                9,
-
-                                font: {
-
-                                    size:
-                                    13,
-
-                                    weight:
-                                    "600"
-
-                                }
+                                borderSkipped:
+                                    false
 
                             }
 
-                        }
+                        ]
 
                     },
 
 
-                    scales: {
+                    options: {
 
-                        x: {
-
-                            border: {
-                                display: false
-                            },
-
-                            grid: {
-                                display: false
-                            },
-
-                            ticks: {
-
-                                color:
-                                theme.text,
-
-                                font: {
-                                    weight:
-                                    "500"
-                                }
-
-                            }
-
-                        },
-
-
-                        y: {
-
-                            beginAtZero:
+                        responsive:
                             true,
 
-                            border: {
-                                display: false
-                            },
+                        maintainAspectRatio:
+                            false,
 
-                            grid: {
-                                color:
-                                theme.grid
-                            },
+                        interaction: {
+                            mode:
+                                "index",
+                            intersect:
+                                false
+                        },
 
-                            ticks: {
+                        plugins: {
 
-                                color:
-                                theme.text,
+                            legend: {
 
-                                font: {
-                                    weight:
-                                    "500"
-                                },
+                                position:
+                                    "top",
 
-                                callback(value) {
+                                align:
+                                    "end",
 
-                                    if (
-                                        value >=
-                                        1000
-                                    ) {
+                                labels: {
 
-                                        return (
-                                            "฿" +
-                                            value /
-                                            1000 +
-                                            "k"
-                                        );
+                                    color:
+                                        theme.text,
+
+                                    usePointStyle:
+                                        true,
+
+                                    pointStyle:
+                                        "circle",
+
+                                    padding:
+                                        18,
+
+                                    boxWidth:
+                                        9,
+
+                                    boxHeight:
+                                        9,
+
+                                    font: {
+
+                                        size:
+                                            13,
+
+                                        weight:
+                                            "600"
 
                                     }
 
+                                }
 
-                                    return value;
+                            }
+
+                        },
+
+
+                        scales: {
+
+                            x: {
+
+                                border: {
+                                    display:
+                                        false
+                                },
+
+                                grid: {
+                                    display:
+                                        false
+                                },
+
+                                ticks: {
+
+                                    color:
+                                        theme.text,
+
+                                    font: {
+                                        weight:
+                                            "500"
+                                    }
+
+                                }
+
+                            },
+
+
+                            y: {
+
+                                beginAtZero:
+                                    true,
+
+                                border: {
+                                    display:
+                                        false
+                                },
+
+                                grid: {
+                                    color:
+                                        theme.grid
+                                },
+
+                                ticks: {
+
+                                    color:
+                                        theme.text,
+
+                                    font: {
+                                        weight:
+                                            "500"
+                                    },
+
+                                    callback(value) {
+
+                                        if (
+                                            value >=
+                                            1000
+                                        ) {
+
+                                            return (
+                                                "฿" +
+                                                value /
+                                                1000 +
+                                                "k"
+                                            );
+
+                                        }
+
+                                        return value;
+
+                                    }
 
                                 }
 
@@ -1576,9 +1519,7 @@ function createDashboardCharts(data = []) {
                     }
 
                 }
-
-            }
-        );
+            );
 
     }
 
@@ -1592,9 +1533,9 @@ function renderExpenseLegend(
 ) {
 
     const canvas =
-    document.getElementById(
-        "expenseChart"
-    );
+        document.getElementById(
+            "expenseChart"
+        );
 
 
     if (!canvas) {
@@ -1603,27 +1544,27 @@ function renderExpenseLegend(
 
 
     const card =
-    canvas.closest(
-        ".chart"
-    );
+        canvas.closest(
+            ".chart"
+        );
 
 
     let legend =
-    card.querySelector(
-        ".expense-legend"
-    );
+        card.querySelector(
+            ".expense-legend"
+        );
 
 
     if (!legend) {
 
         legend =
-        document.createElement(
-            "div"
-        );
+            document.createElement(
+                "div"
+            );
 
 
         legend.className =
-        "expense-legend";
+            "expense-legend";
 
 
         card.appendChild(
@@ -1634,30 +1575,30 @@ function renderExpenseLegend(
 
 
     legend.innerHTML =
-    labels.map(
-        (label,index) => `
+        labels.map(
+            (label, index) => `
 
-        <div class="expense-legend-item">
+            <div class="expense-legend-item">
 
-            <div class="expense-legend-name">
+                <div class="expense-legend-name">
 
-                <span
-                class="legend-dot"
-                style="background:${colors[index % colors.length]}">
-                </span>
+                    <span
+                    class="legend-dot"
+                    style="background:${colors[index % colors.length]}">
+                    </span>
 
-                ${escapeHTML(label)}
+                    ${escapeHTML(label)}
+
+                </div>
+
+                <strong>
+                    ฿${formatMoney(values[index])}
+                </strong>
 
             </div>
 
-            <strong>
-                ฿${formatMoney(values[index])}
-            </strong>
-
-        </div>
-
-        `
-    ).join("");
+            `
+        ).join("");
 
 }
 
@@ -1665,9 +1606,9 @@ function renderExpenseLegend(
 async function loadTransactions() {
 
     const list =
-    document.getElementById(
-        "transaction-list"
-    );
+        document.getElementById(
+            "transaction-list"
+        );
 
 
     if (!list) {
@@ -1676,15 +1617,15 @@ async function loadTransactions() {
 
 
     const result =
-    await fetchTransactions();
+        await fetchTransactions();
 
 
     transactionsData =
-    result.data;
+        result.data;
 
 
     demoMode =
-    result.demo;
+        result.demo;
 
 
     renderTransactions(
@@ -1700,9 +1641,9 @@ async function loadTransactions() {
 function renderTransactions(data) {
 
     const list =
-    document.getElementById(
-        "transaction-list"
-    );
+        document.getElementById(
+            "transaction-list"
+        );
 
 
     if (!list) {
@@ -1721,7 +1662,7 @@ function renderTransactions(data) {
             <h3>No transactions found</h3>
 
             <p>
-            Try another search or add a new transaction.
+                Try another search or add a new transaction.
             </p>
 
         </div>
@@ -1734,99 +1675,99 @@ function renderTransactions(data) {
 
 
     const sorted =
-    [...data]
-    .sort(
-        (a,b) =>
-        new Date(b.date) -
-        new Date(a.date)
-    );
+        [...data]
+            .sort(
+                (a, b) =>
+                    new Date(b.date) -
+                    new Date(a.date)
+            );
 
 
     list.innerHTML =
-    sorted.map(
-        item => {
+        sorted.map(
+            item => {
 
-            const amountClass =
-            item.type ===
-            "income"
-            ? "income"
-            : "expense";
-
-
-            const sign =
-            item.type ===
-            "income"
-            ? "+"
-            : "-";
+                const amountClass =
+                    item.type ===
+                    "income"
+                        ? "income"
+                        : "expense";
 
 
-            return `
+                const sign =
+                    item.type ===
+                    "income"
+                        ? "+"
+                        : "-";
 
-            <div class="transaction-row">
 
-                <div class="category-icon">
+                return `
 
-                    <i class="${getCategoryIcon(item.category)}"></i>
+                <div class="transaction-row">
+
+                    <div class="category-icon">
+
+                        <i class="${getCategoryIcon(item.category)}"></i>
+
+                    </div>
+
+
+                    <div class="transaction-main">
+
+                        <b>
+                            ${escapeHTML(item.title)}
+                        </b>
+
+                        <p>
+
+                            ${escapeHTML(item.category)}
+
+                            <span>•</span>
+
+                            ${formatTransactionDate(item.date)}
+
+                        </p>
+
+                    </div>
+
+
+                    <strong
+                    class="transaction-amount ${amountClass}">
+
+                        ${sign}฿${formatMoney(item.amount)}
+
+                    </strong>
+
+
+                    <div class="transaction-actions">
+
+                        <button
+                        class="edit-action"
+                        onclick="openEdit(${item.id})"
+                        aria-label="Edit transaction">
+
+                            <i class="ph-duotone ph-pencil-simple"></i>
+
+                        </button>
+
+
+                        <button
+                        class="delete-action"
+                        onclick="deleteTransaction(${item.id})"
+                        aria-label="Delete transaction">
+
+                            <i class="ph-duotone ph-trash"></i>
+
+                        </button>
+
+                    </div>
 
                 </div>
 
+                `;
 
-                <div class="transaction-main">
-
-                    <b>
-                        ${escapeHTML(item.title)}
-                    </b>
-
-                    <p>
-
-                        ${escapeHTML(item.category)}
-
-                        <span>•</span>
-
-                        ${formatTransactionDate(item.date)}
-
-                    </p>
-
-                </div>
-
-
-                <strong
-                class="transaction-amount ${amountClass}">
-
-                    ${sign}฿${formatMoney(item.amount)}
-
-                </strong>
-
-
-                <div class="transaction-actions">
-
-                    <button
-                    class="edit-action"
-                    onclick="openEdit(${item.id})"
-                    aria-label="Edit transaction">
-
-                        <i class="ph-duotone ph-pencil-simple"></i>
-
-                    </button>
-
-
-                    <button
-                    class="delete-action"
-                    onclick="deleteTransaction(${item.id})"
-                    aria-label="Delete transaction">
-
-                        <i class="ph-duotone ph-trash"></i>
-
-                    </button>
-
-                </div>
-
-            </div>
-
-            `;
-
-        }
-    ).join("");
+            }
+        ).join("");
 
 }
 
@@ -1834,9 +1775,9 @@ function renderTransactions(data) {
 function updateTransactionSummary() {
 
     const incomeElement =
-    document.getElementById(
-        "transactionIncome"
-    );
+        document.getElementById(
+            "transactionIncome"
+        );
 
 
     if (!incomeElement) {
@@ -1845,25 +1786,25 @@ function updateTransactionSummary() {
 
 
     const summary =
-    calculateSummary(
-        transactionsData
-    );
+        calculateSummary(
+            transactionsData
+        );
 
 
     incomeElement.textContent =
-    `฿${formatMoney(summary.income)}`;
+        `฿${formatMoney(summary.income)}`;
 
 
     document.getElementById(
         "transactionExpense"
     ).textContent =
-    `฿${formatMoney(summary.expense)}`;
+        `฿${formatMoney(summary.expense)}`;
 
 
     document.getElementById(
         "transactionBalance"
     ).textContent =
-    `฿${formatMoney(summary.balance)}`;
+        `฿${formatMoney(summary.balance)}`;
 
 }
 
@@ -1871,58 +1812,57 @@ function updateTransactionSummary() {
 function filterLocal() {
 
     const search =
-    document.getElementById(
-        "searchInput"
-    );
+        document.getElementById(
+            "searchInput"
+        );
 
 
     const typeSelect =
-    document.getElementById(
-        "filterType"
-    );
+        document.getElementById(
+            "filterType"
+        );
 
 
     if (
         !search ||
         !typeSelect
     ) {
-
         return;
-
     }
 
 
     const keyword =
-    search.value
-    .trim()
-    .toLowerCase();
-
-
-    const type =
-    typeSelect.value;
-
-
-    const filtered =
-    transactionsData.filter(
-        item => {
-
-            const searchable =
-            `${item.title} ${item.category}`
+        search.value
+            .trim()
             .toLowerCase();
 
 
-            return (
-                searchable.includes(
-                    keyword
-                ) &&
-                (
-                    !type ||
-                    item.type === type
-                )
-            );
+    const type =
+        typeSelect.value;
 
-        }
-    );
+
+    const filtered =
+        transactionsData.filter(
+            item => {
+
+                const searchable =
+                    `${item.title} ${item.category}`
+                        .toLowerCase();
+
+
+                return (
+                    searchable.includes(
+                        keyword
+                    ) &&
+                    (
+                        !type ||
+                        item.type ===
+                        type
+                    )
+                );
+
+            }
+        );
 
 
     renderTransactions(
@@ -1937,42 +1877,42 @@ async function addTransaction() {
     const transaction = {
 
         title:
-        document
-        .getElementById(
-            "title"
-        )
-        .value
-        .trim(),
+            document
+                .getElementById(
+                    "title"
+                )
+                .value
+                .trim(),
 
         amount:
-        Number(
-            document
-            .getElementById(
-                "amount"
-            )
-            .value
-        ),
+            Number(
+                document
+                    .getElementById(
+                        "amount"
+                    )
+                    .value
+            ),
 
         category:
-        document
-        .getElementById(
-            "category"
-        )
-        .value,
+            document
+                .getElementById(
+                    "category"
+                )
+                .value,
 
         type:
-        document
-        .getElementById(
-            "type"
-        )
-        .value,
+            document
+                .getElementById(
+                    "type"
+                )
+                .value,
 
         date:
-        document
-        .getElementById(
-            "date"
-        )
-        .value
+            document
+                .getElementById(
+                    "date"
+                )
+                .value
 
     };
 
@@ -1996,7 +1936,7 @@ async function addTransaction() {
     if (demoMode) {
 
         transaction.id =
-        Date.now();
+            Date.now();
 
 
         transactionsData.unshift(
@@ -2031,33 +1971,29 @@ async function addTransaction() {
     try {
 
         const response =
-        await fetch(
-            "/api/transactions",
-            {
+            await fetch(
+                "/api/transactions",
+                {
 
-                method:
-                "POST",
+                    method:
+                        "POST",
 
-                headers: {
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                    "Content-Type":
-                    "application/json"
+                    body:
+                        JSON.stringify(
+                            transaction
+                        )
 
-                },
-
-                body:
-                JSON.stringify(
-                    transaction
-                )
-
-            }
-        );
+                }
+            );
 
 
         if (!response.ok) {
-
             throw new Error();
-
         }
 
 
@@ -2099,19 +2035,19 @@ function resetTransactionForm() {
     document.getElementById(
         "category"
     ).value =
-    "Food";
+        "Food";
 
 
     document.getElementById(
         "type"
     ).value =
-    "expense";
+        "expense";
 
 
     document.getElementById(
         "date"
     ).value =
-    getTodayString();
+        getTodayString();
 
 }
 
@@ -2119,11 +2055,11 @@ function resetTransactionForm() {
 async function deleteTransaction(id) {
 
     const item =
-    transactionsData.find(
-        transaction =>
-        Number(transaction.id) ===
-        Number(id)
-    );
+        transactionsData.find(
+            transaction =>
+                Number(transaction.id) ===
+                Number(id)
+        );
 
 
     if (!item) {
@@ -2136,20 +2072,18 @@ async function deleteTransaction(id) {
             `Delete "${item.title}"?`
         )
     ) {
-
         return;
-
     }
 
 
     if (demoMode) {
 
         transactionsData =
-        transactionsData.filter(
-            transaction =>
-            Number(transaction.id) !==
-            Number(id)
-        );
+            transactionsData.filter(
+                transaction =>
+                    Number(transaction.id) !==
+                    Number(id)
+            );
 
 
         saveDemoTransactions();
@@ -2176,13 +2110,13 @@ async function deleteTransaction(id) {
     try {
 
         const response =
-        await fetch(
-            `/api/transactions/${id}`,
-            {
-                method:
-                "DELETE"
-            }
-        );
+            await fetch(
+                `/api/transactions/${id}`,
+                {
+                    method:
+                        "DELETE"
+                }
+            );
 
 
         if (!response.ok) {
@@ -2213,11 +2147,11 @@ async function deleteTransaction(id) {
 function openEdit(id) {
 
     const item =
-    transactionsData.find(
-        transaction =>
-        Number(transaction.id) ===
-        Number(id)
-    );
+        transactionsData.find(
+            transaction =>
+                Number(transaction.id) ===
+                Number(id)
+        );
 
 
     if (!item) {
@@ -2226,43 +2160,43 @@ function openEdit(id) {
 
 
     currentEditId =
-    item.id;
+        item.id;
 
 
     document.getElementById(
         "editTitle"
     ).value =
-    item.title;
+        item.title;
 
 
     document.getElementById(
         "editAmount"
     ).value =
-    item.amount;
+        item.amount;
 
 
     document.getElementById(
         "editCategory"
     ).value =
-    item.category;
+        item.category;
 
 
     document.getElementById(
         "editType"
     ).value =
-    item.type;
+        item.type;
 
 
     document.getElementById(
         "editDate"
     ).value =
-    item.date;
+        item.date;
 
 
     document.getElementById(
         "editModal"
     ).style.display =
-    "flex";
+        "flex";
 
 }
 
@@ -2270,17 +2204,21 @@ function openEdit(id) {
 function closeEdit() {
 
     const modal =
-    document.getElementById(
-        "editModal"
-    );
+        document.getElementById(
+            "editModal"
+        );
 
 
     if (modal) {
 
         modal.style.display =
-        "none";
+            "none";
 
     }
+
+
+    currentEditId =
+        null;
 
 }
 
@@ -2288,53 +2226,52 @@ function closeEdit() {
 async function updateTransaction() {
 
     if (
-        currentEditId === null
+        currentEditId ===
+        null
     ) {
-
         return;
-
     }
 
 
     const updated = {
 
         title:
-        document
-        .getElementById(
-            "editTitle"
-        )
-        .value
-        .trim(),
+            document
+                .getElementById(
+                    "editTitle"
+                )
+                .value
+                .trim(),
 
         amount:
-        Number(
-            document
-            .getElementById(
-                "editAmount"
-            )
-            .value
-        ),
+            Number(
+                document
+                    .getElementById(
+                        "editAmount"
+                    )
+                    .value
+            ),
 
         category:
-        document
-        .getElementById(
-            "editCategory"
-        )
-        .value,
+            document
+                .getElementById(
+                    "editCategory"
+                )
+                .value,
 
         type:
-        document
-        .getElementById(
-            "editType"
-        )
-        .value,
+            document
+                .getElementById(
+                    "editType"
+                )
+                .value,
 
         date:
-        document
-        .getElementById(
-            "editDate"
-        )
-        .value
+            document
+                .getElementById(
+                    "editDate"
+                )
+                .value
 
     };
 
@@ -2358,19 +2295,20 @@ async function updateTransaction() {
     if (demoMode) {
 
         const index =
-        transactionsData.findIndex(
-            item =>
-            Number(item.id) ===
-            Number(currentEditId)
-        );
+            transactionsData.findIndex(
+                item =>
+                    Number(item.id) ===
+                    Number(currentEditId)
+            );
 
 
-        if (index !== -1) {
+        if (
+            index !== -1
+        ) {
 
             transactionsData[index] = {
 
                 ...transactionsData[index],
-
                 ...updated
 
             };
@@ -2405,27 +2343,25 @@ async function updateTransaction() {
     try {
 
         const response =
-        await fetch(
-            `/api/transactions/${currentEditId}`,
-            {
+            await fetch(
+                `/api/transactions/${currentEditId}`,
+                {
 
-                method:
-                "PATCH",
+                    method:
+                        "PATCH",
 
-                headers: {
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                    "Content-Type":
-                    "application/json"
+                    body:
+                        JSON.stringify(
+                            updated
+                        )
 
-                },
-
-                body:
-                JSON.stringify(
-                    updated
-                )
-
-            }
-        );
+                }
+            );
 
 
         if (!response.ok) {
@@ -2459,9 +2395,9 @@ async function updateTransaction() {
 function scrollToAddTransaction() {
 
     const section =
-    document.getElementById(
-        "addTransactionSection"
-    );
+        document.getElementById(
+            "addTransactionSection"
+        );
 
 
     if (!section) {
@@ -2471,10 +2407,10 @@ function scrollToAddTransaction() {
 
     section.scrollIntoView({
         behavior:
-        "smooth",
+            "smooth",
 
         block:
-        "center"
+            "center"
     });
 
 
@@ -2482,9 +2418,9 @@ function scrollToAddTransaction() {
         () => {
 
             const title =
-            document.getElementById(
-                "title"
-            );
+                document.getElementById(
+                    "title"
+                );
 
 
             if (title) {
@@ -2501,9 +2437,9 @@ function scrollToAddTransaction() {
 function openAddModal() {
 
     const modal =
-    document.getElementById(
-        "addModal"
-    );
+        document.getElementById(
+            "addModal"
+        );
 
 
     if (!modal) {
@@ -2512,13 +2448,13 @@ function openAddModal() {
 
 
     modal.style.display =
-    "flex";
+        "flex";
 
 
     const dateInput =
-    document.getElementById(
-        "modalDate"
-    );
+        document.getElementById(
+            "modalDate"
+        );
 
 
     if (
@@ -2527,7 +2463,7 @@ function openAddModal() {
     ) {
 
         dateInput.value =
-        getTodayString();
+            getTodayString();
 
     }
 
@@ -2537,15 +2473,15 @@ function openAddModal() {
 function closeAddModal() {
 
     const modal =
-    document.getElementById(
-        "addModal"
-    );
+        document.getElementById(
+            "addModal"
+        );
 
 
     if (modal) {
 
         modal.style.display =
-        "none";
+            "none";
 
     }
 
@@ -2555,28 +2491,26 @@ function closeAddModal() {
 function setTransactionType(type) {
 
     modalTransactionType =
-    type;
+        type;
 
 
     const expenseButton =
-    document.getElementById(
-        "expenseTypeButton"
-    );
+        document.getElementById(
+            "expenseTypeButton"
+        );
 
 
     const incomeButton =
-    document.getElementById(
-        "incomeTypeButton"
-    );
+        document.getElementById(
+            "incomeTypeButton"
+        );
 
 
     if (
         !expenseButton ||
         !incomeButton
     ) {
-
         return;
-
     }
 
 
@@ -2599,38 +2533,38 @@ async function saveModalTransaction() {
     const transaction = {
 
         title:
-        document
-        .getElementById(
-            "modalTitle"
-        )
-        .value
-        .trim(),
+            document
+                .getElementById(
+                    "modalTitle"
+                )
+                .value
+                .trim(),
 
         amount:
-        Number(
-            document
-            .getElementById(
-                "modalAmount"
-            )
-            .value
-        ),
+            Number(
+                document
+                    .getElementById(
+                        "modalAmount"
+                    )
+                    .value
+            ),
 
         category:
-        document
-        .getElementById(
-            "modalCategory"
-        )
-        .value,
+            document
+                .getElementById(
+                    "modalCategory"
+                )
+                .value,
 
         type:
-        modalTransactionType,
+            modalTransactionType,
 
         date:
-        document
-        .getElementById(
-            "modalDate"
-        )
-        .value
+            document
+                .getElementById(
+                    "modalDate"
+                )
+                .value
 
     };
 
@@ -2654,27 +2588,25 @@ async function saveModalTransaction() {
     try {
 
         const response =
-        await fetch(
-            "/api/transactions",
-            {
+            await fetch(
+                "/api/transactions",
+                {
 
-                method:
-                "POST",
+                    method:
+                        "POST",
 
-                headers: {
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                    "Content-Type":
-                    "application/json"
+                    body:
+                        JSON.stringify(
+                            transaction
+                        )
 
-                },
-
-                body:
-                JSON.stringify(
-                    transaction
-                )
-
-            }
-        );
+                }
+            );
 
 
         if (!response.ok) {
@@ -2685,12 +2617,13 @@ async function saveModalTransaction() {
     } catch (error) {
 
         const demo =
-        getDemoTransactions();
+            getDemoTransactions();
 
 
         demo.unshift({
             ...transaction,
-            id: Date.now()
+            id:
+                Date.now()
         });
 
 
@@ -2723,9 +2656,9 @@ async function saveModalTransaction() {
 function clearAddModal() {
 
     const title =
-    document.getElementById(
-        "modalTitle"
-    );
+        document.getElementById(
+            "modalTitle"
+        );
 
 
     if (!title) {
@@ -2744,13 +2677,13 @@ function clearAddModal() {
     document.getElementById(
         "modalCategory"
     ).value =
-    "Food";
+        "Food";
 
 
     document.getElementById(
         "modalDate"
     ).value =
-    getTodayString();
+        getTodayString();
 
 
     setTransactionType(
@@ -2763,9 +2696,9 @@ function clearAddModal() {
 async function loadAnalytics() {
 
     const canvas =
-    document.getElementById(
-        "categoryChart"
-    );
+        document.getElementById(
+            "categoryChart"
+        );
 
 
     if (!canvas) {
@@ -2774,73 +2707,75 @@ async function loadAnalytics() {
 
 
     const result =
-    await fetchTransactions();
+        await fetchTransactions();
 
 
     analyticsTransactions =
-    result.data;
+        result.data;
 
 
     const summary =
-    calculateSummary(
-        analyticsTransactions
-    );
+        calculateSummary(
+            analyticsTransactions
+        );
 
 
     document.getElementById(
         "analyticsExpense"
     ).textContent =
-    `฿${formatMoney(summary.expense)}`;
+        `฿${formatMoney(summary.expense)}`;
 
 
     document.getElementById(
         "analyticsSaving"
     ).textContent =
-    `${summary.savingRate}%`;
+        `${summary.savingRate}%`;
 
 
     const expenseItems =
-    analyticsTransactions.filter(
-        item =>
-        item.type === "expense"
-    );
+        analyticsTransactions.filter(
+            item =>
+                item.type ===
+                "expense"
+        );
 
 
     const average =
-    expenseItems.length
-    ? summary.expense /
-      expenseItems.length
-    : 0;
+        expenseItems.length
+            ? summary.expense /
+            expenseItems.length
+            : 0;
 
 
     document.getElementById(
         "analyticsAverage"
     ).textContent =
-    `฿${formatMoney(average)}`;
+        `฿${formatMoney(average)}`;
 
 
     const categoryTotals =
-    getExpenseCategories(
-        analyticsTransactions
-    );
+        getExpenseCategories(
+            analyticsTransactions
+        );
 
 
     const highestCategory =
-    Object.entries(
-        categoryTotals
-    )
-    .sort(
-        (a,b) =>
-        b[1] - a[1]
-    )[0];
+        Object.entries(
+            categoryTotals
+        )
+            .sort(
+                (a, b) =>
+                    b[1] -
+                    a[1]
+            )[0];
 
 
     document.getElementById(
         "analyticsInsight"
     ).textContent =
-    highestCategory
-    ? `${highestCategory[0]} is currently your highest spending category at ฿${formatMoney(highestCategory[1])}.`
-    : "Add expense transactions to see your spending insight.";
+        highestCategory
+            ? `${highestCategory[0]} is currently your highest spending category at ฿${formatMoney(highestCategory[1])}.`
+            : "Add expense transactions to see your spending insight.";
 
 
     createAnalyticsCharts(
@@ -2858,54 +2793,50 @@ function createAnalyticsCharts(
         typeof Chart ===
         "undefined"
     ) {
-
         return;
-
     }
 
 
     const categoryCanvas =
-    document.getElementById(
-        "categoryChart"
-    );
+        document.getElementById(
+            "categoryChart"
+        );
 
 
     const trendCanvas =
-    document.getElementById(
-        "trendChart"
-    );
+        document.getElementById(
+            "trendChart"
+        );
 
 
     if (
         !categoryCanvas &&
         !trendCanvas
     ) {
-
         return;
-
     }
 
 
     const theme =
-    getChartTheme();
+        getChartTheme();
 
 
     const categories =
-    getExpenseCategories(
-        data
-    );
+        getExpenseCategories(
+            data
+        );
 
 
     const labels =
-    Object.keys(
-        categories
-    );
+        Object.keys(
+            categories
+        );
 
 
     const values =
-    Object.values(
-        categories
-    );
+        Object.values(
+            categories
+        );
 
 
     const colors = [
@@ -2933,74 +2864,79 @@ function createAnalyticsCharts(
 
 
         analyticsCategoryChart =
-        new Chart(
-            categoryCanvas,
-            {
+            new Chart(
+                categoryCanvas,
+                {
 
-                type:
-                "doughnut",
+                    type:
+                        "doughnut",
 
-                plugins: [
-                    donutCenterPlugin
-                ],
+                    plugins: [
+                        donutCenterPlugin
+                    ],
 
-                data: {
+                    data: {
 
-                    labels,
+                        labels,
 
-                    datasets: [
-                        {
+                        datasets: [
+                            {
 
-                            data:
-                            values,
+                                data:
+                                    values,
 
-                            backgroundColor:
-                            colors,
+                                backgroundColor:
+                                    colors,
 
-                            borderWidth:
-                            0,
+                                borderWidth:
+                                    0,
 
-                            spacing:
-                            3,
+                                spacing:
+                                    3,
 
-                            borderRadius:
-                            8
+                                borderRadius:
+                                    8
 
-                        }
-                    ]
+                            }
+                        ]
 
-                },
+                    },
 
 
-                options: {
+                    options: {
 
-                    maintainAspectRatio:
-                    false,
+                        responsive:
+                            true,
 
-                    cutout:
-                    "72%",
+                        maintainAspectRatio:
+                            false,
 
-                    plugins: {
+                        cutout:
+                            "72%",
 
-                        legend: {
+                        plugins: {
 
-                            position:
-                            "bottom",
+                            legend: {
 
-                            labels: {
+                                position:
+                                    "bottom",
 
-                                color:
-                                theme.text,
+                                labels: {
 
-                                usePointStyle:
-                                true,
+                                    color:
+                                        theme.text,
 
-                                padding:
-                                15,
+                                    usePointStyle:
+                                        true,
 
-                                font: {
-                                    weight:
-                                    "600"
+                                    padding:
+                                        15,
+
+                                    font: {
+                                        weight:
+                                            "600"
+                                    }
+
                                 }
 
                             }
@@ -3010,9 +2946,7 @@ function createAnalyticsCharts(
                     }
 
                 }
-
-            }
-        );
+            );
 
     }
 
@@ -3029,152 +2963,169 @@ function createAnalyticsCharts(
 
 
         const monthly =
-        new Array(12).fill(0);
+            new Array(12)
+                .fill(0);
 
 
         data
-        .filter(
-            item =>
-            item.type === "expense"
-        )
-        .forEach(
-            item => {
+            .filter(
+                item =>
+                    item.type ===
+                    "expense"
+            )
+            .forEach(
+                item => {
 
-                const date =
-                new Date(
-                    `${item.date}T00:00:00`
-                );
+                    const date =
+                        new Date(
+                            `${item.date}T00:00:00`
+                        );
 
 
-                monthly[
-                    date.getMonth()
-                ] +=
-                Number(item.amount);
+                    monthly[
+                        date.getMonth()
+                    ] +=
+                        Number(item.amount);
 
-            }
-        );
+                }
+            );
 
 
         analyticsTrendChart =
-        new Chart(
-            trendCanvas,
-            {
+            new Chart(
+                trendCanvas,
+                {
 
-                type:
-                "line",
+                    type:
+                        "line",
 
-                data: {
+                    data: {
 
-                    labels: [
-                        "Jan",
-                        "Feb",
-                        "Mar",
-                        "Apr",
-                        "May",
-                        "Jun",
-                        "Jul",
-                        "Aug",
-                        "Sep",
-                        "Oct",
-                        "Nov",
-                        "Dec"
-                    ],
+                        labels: [
+                            "Jan",
+                            "Feb",
+                            "Mar",
+                            "Apr",
+                            "May",
+                            "Jun",
+                            "Jul",
+                            "Aug",
+                            "Sep",
+                            "Oct",
+                            "Nov",
+                            "Dec"
+                        ],
 
-                    datasets: [
-                        {
+                        datasets: [
+                            {
 
-                            label:
-                            "Expense",
+                                label:
+                                    "Expense",
 
-                            data:
-                            monthly,
+                                data:
+                                    monthly,
 
-                            borderColor:
-                            theme.primary,
+                                borderColor:
+                                    theme.primary,
 
-                            backgroundColor:
-                            colorToRGBA(
-                                theme.primary,
-                                .15
-                            ),
+                                backgroundColor:
+                                    colorToRGBA(
+                                        theme.primary,
+                                        .15
+                                    ),
 
-                            fill:
-                            true,
+                                fill:
+                                    true,
 
-                            tension:
-                            .38,
+                                tension:
+                                    .38,
 
-                            borderWidth:
-                            3,
+                                borderWidth:
+                                    3,
 
-                            pointRadius:
-                            3,
+                                pointRadius:
+                                    3,
 
-                            pointHoverRadius:
-                            6
+                                pointHoverRadius:
+                                    6
 
-                        }
-                    ]
-
-                },
-
-
-                options: {
-
-                    maintainAspectRatio:
-                    false,
-
-                    plugins: {
-
-                        legend: {
-
-                            labels: {
-                                color:
-                                theme.text
                             }
-
-                        }
+                        ]
 
                     },
 
 
-                    scales: {
+                    options: {
 
-                        x: {
+                        responsive:
+                            true,
 
-                            border: {
-                                display: false
-                            },
+                        maintainAspectRatio:
+                            false,
 
-                            grid: {
-                                display: false
-                            },
+                        plugins: {
 
-                            ticks: {
-                                color:
-                                theme.text
+                            legend: {
+
+                                labels: {
+
+                                    color:
+                                        theme.text,
+
+                                    font: {
+                                        weight:
+                                            "600"
+                                    }
+
+                                }
+
                             }
 
                         },
 
 
-                        y: {
+                        scales: {
 
-                            beginAtZero:
-                            true,
+                            x: {
 
-                            border: {
-                                display: false
+                                border: {
+                                    display:
+                                        false
+                                },
+
+                                grid: {
+                                    display:
+                                        false
+                                },
+
+                                ticks: {
+                                    color:
+                                        theme.text
+                                }
+
                             },
 
-                            grid: {
-                                color:
-                                theme.grid
-                            },
 
-                            ticks: {
-                                color:
-                                theme.text
+                            y: {
+
+                                beginAtZero:
+                                    true,
+
+                                border: {
+                                    display:
+                                        false
+                                },
+
+                                grid: {
+                                    color:
+                                        theme.grid
+                                },
+
+                                ticks: {
+                                    color:
+                                        theme.text
+                                }
+
                             }
 
                         }
@@ -3182,9 +3133,7 @@ function createAnalyticsCharts(
                     }
 
                 }
-
-            }
-        );
+            );
 
     }
 
@@ -3199,14 +3148,12 @@ function colorToRGBA(
     if (
         !color.startsWith("#")
     ) {
-
         return color;
-
     }
 
 
     let hex =
-    color.slice(1);
+        color.slice(1);
 
 
     if (
@@ -3214,34 +3161,37 @@ function colorToRGBA(
     ) {
 
         hex =
-        hex
-        .split("")
-        .map(
-            char =>
-            char + char
-        )
-        .join("");
+            hex
+                .split("")
+                .map(
+                    char =>
+                        char + char
+                )
+                .join("");
 
     }
 
 
     const number =
-    parseInt(
-        hex,
-        16
-    );
+        parseInt(
+            hex,
+            16
+        );
 
 
     const red =
-    (number >> 16) & 255;
+        (number >> 16) &
+        255;
 
 
     const green =
-    (number >> 8) & 255;
+        (number >> 8) &
+        255;
 
 
     const blue =
-    number & 255;
+        number &
+        255;
 
 
     return (
@@ -3266,21 +3216,21 @@ function saveGoals() {
 function addGoal() {
 
     const nameInput =
-    document.getElementById(
-        "goalName"
-    );
+        document.getElementById(
+            "goalName"
+        );
 
 
     const amountInput =
-    document.getElementById(
-        "goalAmount"
-    );
+        document.getElementById(
+            "goalAmount"
+        );
 
 
     const currentInput =
-    document.getElementById(
-        "goalCurrent"
-    );
+        document.getElementById(
+            "goalCurrent"
+        );
 
 
     if (
@@ -3288,29 +3238,28 @@ function addGoal() {
         !amountInput ||
         !currentInput
     ) {
-
         return;
-
     }
 
 
     const goal = {
 
         id:
-        Date.now(),
+            Date.now(),
 
         name:
-        nameInput.value.trim(),
+            nameInput.value
+                .trim(),
 
         amount:
-        Number(
-            amountInput.value
-        ),
+            Number(
+                amountInput.value
+            ),
 
         current:
-        Number(
-            currentInput.value
-        )
+            Number(
+                currentInput.value
+            )
 
     };
 
@@ -3327,6 +3276,17 @@ function addGoal() {
         );
 
         return;
+
+    }
+
+
+    if (
+        goal.current >
+        goal.amount
+    ) {
+
+        goal.current =
+            goal.amount;
 
     }
 
@@ -3359,9 +3319,9 @@ function addGoal() {
 function renderGoals() {
 
     const list =
-    document.getElementById(
-        "goalList"
-    );
+        document.getElementById(
+            "goalList"
+        );
 
 
     if (!list) {
@@ -3379,7 +3339,9 @@ function renderGoals() {
 
             <h3>No goals yet</h3>
 
-            <p>Create your first saving goal.</p>
+            <p>
+                Create your first saving goal.
+            </p>
 
         </div>
 
@@ -3391,106 +3353,435 @@ function renderGoals() {
 
 
     list.innerHTML =
-    goals.map(
-        goal => {
+        goals.map(
+            goal => {
 
-            let percent =
-            (
-                Number(goal.current) /
-                Number(goal.amount)
-            ) * 100;
-
-
-            if (
-                !Number.isFinite(
-                    percent
-                )
-            ) {
-
-                percent = 0;
-
-            }
+                let percent =
+                    (
+                        Number(goal.current) /
+                        Number(goal.amount)
+                    ) *
+                    100;
 
 
-            percent =
-            Math.min(
-                100,
-                Math.max(
-                    0,
-                    percent
-                )
-            );
+                if (
+                    !Number.isFinite(
+                        percent
+                    )
+                ) {
+                    percent = 0;
+                }
 
 
-            return `
-
-            <div class="goal-card">
-
-                <div class="goal-header">
-
-                    <h3>
-                        ${escapeHTML(goal.name)}
-                    </h3>
-
-                    <b>
-                        ${Math.round(percent)}%
-                    </b>
-
-                </div>
+                percent =
+                    Math.min(
+                        100,
+                        Math.max(
+                            0,
+                            percent
+                        )
+                    );
 
 
-                <p>
-
-                    ฿${formatMoney(goal.current)}
-
-                    /
-
-                    ฿${formatMoney(goal.amount)}
-
-                </p>
+                const completed =
+                    percent >= 100;
 
 
-                <div class="progress">
+                const remaining =
+                    Math.max(
+                        0,
+                        Number(goal.amount) -
+                        Number(goal.current)
+                    );
 
-                    <div
-                    class="progress-bar"
-                    style="width:${percent}%">
+
+                return `
+
+                <div class="goal-card">
+
+                    <div class="goal-top-row">
+
+                        <div class="goal-name-area">
+
+                            <div class="goal-icon">
+
+                                <i class="ph-duotone ph-target"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    ${escapeHTML(goal.name)}
+                                </h3>
+
+                                <p>
+                                    ${
+                                        completed
+                                            ? "Goal completed"
+                                            : "Saving in progress"
+                                    }
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="goal-percentage">
+
+                            ${Math.round(percent)}%
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="goal-money-row">
+
+                        <div>
+
+                            <span>Saved</span>
+
+                            <strong>
+                                ฿${formatMoney(goal.current)}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="goal-target">
+
+                            <span>Target</span>
+
+                            <strong>
+                                ฿${formatMoney(goal.amount)}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="progress">
+
+                        <div
+                        class="progress-bar"
+                        style="width:${percent}%">
+                        </div>
+
+                    </div>
+
+
+                    <div class="goal-remaining">
+
+                        ${
+                            completed
+                                ? `
+                                    <i class="ph-duotone ph-check-circle"></i>
+                                    Goal reached
+                                `
+                                : `
+                                    <i class="ph-duotone ph-coins"></i>
+                                    ฿${formatMoney(remaining)} remaining
+                                `
+                        }
+
+                    </div>
+
+
+                    <div class="goal-actions">
+
+                        <button
+                        class="goal-add-money"
+                        onclick="openSavingModal(${goal.id})"
+                        ${completed ? "disabled" : ""}>
+
+                            <i class="ph-duotone ph-plus-circle"></i>
+
+                            ${
+                                completed
+                                    ? "Completed"
+                                    : "Add Saving"
+                            }
+
+                        </button>
+
+
+                        <button
+                        class="goal-delete-button"
+                        onclick="deleteGoal(${goal.id})">
+
+                            <i class="ph-duotone ph-trash"></i>
+
+                            Delete
+
+                        </button>
+
                     </div>
 
                 </div>
 
+                `;
 
-                <div class="goal-actions">
+            }
+        ).join("");
 
-                    <button
-                    onclick="deleteGoal(${goal.id})">
+}
 
-                        <i class="ph-duotone ph-trash"></i>
 
-                        Delete
+function openSavingModal(id) {
 
-                    </button>
+    const goal =
+        goals.find(
+            item =>
+                Number(item.id) ===
+                Number(id)
+        );
 
-                </div>
 
-            </div>
+    if (!goal) {
+        return;
+    }
 
-            `;
 
-        }
-    ).join("");
+    selectedGoalId =
+        goal.id;
+
+
+    const modal =
+        document.getElementById(
+            "savingModal"
+        );
+
+
+    const name =
+        document.getElementById(
+            "savingGoalName"
+        );
+
+
+    const progress =
+        document.getElementById(
+            "savingGoalProgress"
+        );
+
+
+    const amount =
+        document.getElementById(
+            "savingAmount"
+        );
+
+
+    if (
+        !modal ||
+        !name ||
+        !progress ||
+        !amount
+    ) {
+        return;
+    }
+
+
+    name.textContent =
+        goal.name;
+
+
+    progress.textContent =
+        `฿${formatMoney(goal.current)} / ฿${formatMoney(goal.amount)}`;
+
+
+    amount.value =
+        "";
+
+
+    modal.style.display =
+        "flex";
+
+
+    setTimeout(
+        () => {
+
+            amount.focus();
+
+        },
+        100
+    );
+
+}
+
+
+function closeSavingModal() {
+
+    const modal =
+        document.getElementById(
+            "savingModal"
+        );
+
+
+    if (modal) {
+
+        modal.style.display =
+            "none";
+
+    }
+
+
+    selectedGoalId =
+        null;
+
+}
+
+
+function confirmAddSaving() {
+
+    if (
+        selectedGoalId ===
+        null
+    ) {
+        return;
+    }
+
+
+    const goal =
+        goals.find(
+            item =>
+                Number(item.id) ===
+                Number(selectedGoalId)
+        );
+
+
+    if (!goal) {
+
+        closeSavingModal();
+
+        return;
+
+    }
+
+
+    const amountInput =
+        document.getElementById(
+            "savingAmount"
+        );
+
+
+    const amount =
+        Number(
+            amountInput.value
+        );
+
+
+    if (
+        !Number.isFinite(amount) ||
+        amount <= 0
+    ) {
+
+        showToast(
+            "Please enter a valid amount",
+            false
+        );
+
+        return;
+
+    }
+
+
+    const remaining =
+        Math.max(
+            0,
+            Number(goal.amount) -
+            Number(goal.current)
+        );
+
+
+    const amountToAdd =
+        Math.min(
+            amount,
+            remaining
+        );
+
+
+    goal.current =
+        Number(goal.current) +
+        amountToAdd;
+
+
+    if (
+        goal.current >
+        goal.amount
+    ) {
+
+        goal.current =
+            goal.amount;
+
+    }
+
+
+    saveGoals();
+
+
+    renderGoals();
+
+
+    const completed =
+        goal.current >=
+        goal.amount;
+
+
+    closeSavingModal();
+
+
+    if (completed) {
+
+        showToast(
+            `${goal.name} completed!`
+        );
+
+    } else {
+
+        showToast(
+            `Added ฿${formatMoney(amountToAdd)} to ${goal.name}`
+        );
+
+    }
 
 }
 
 
 function deleteGoal(id) {
 
+    const goal =
+        goals.find(
+            item =>
+                Number(item.id) ===
+                Number(id)
+        );
+
+
+    if (!goal) {
+        return;
+    }
+
+
+    const confirmed =
+        window.confirm(
+            `Delete "${goal.name}"?`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
     goals =
-    goals.filter(
-        goal =>
-        Number(goal.id) !==
-        Number(id)
-    );
+        goals.filter(
+            item =>
+                Number(item.id) !==
+                Number(id)
+        );
 
 
     saveGoals();
@@ -3506,43 +3797,12 @@ function deleteGoal(id) {
 }
 
 
-function formatLocalDate(
-    year,
-    month,
-    day
-) {
-
-    const m =
-    String(
-        month + 1
-    )
-    .padStart(
-        2,
-        "0"
-    );
-
-
-    const d =
-    String(day)
-    .padStart(
-        2,
-        "0"
-    );
-
-
-    return (
-        `${year}-${m}-${d}`
-    );
-
-}
-
-
 async function loadCalendarTransactions() {
 
     const grid =
-    document.getElementById(
-        "calendarGrid"
-    );
+        document.getElementById(
+            "calendarGrid"
+        );
 
 
     if (!grid) {
@@ -3551,11 +3811,11 @@ async function loadCalendarTransactions() {
 
 
     const result =
-    await fetchTransactions();
+        await fetchTransactions();
 
 
     transactionsData =
-    result.data;
+        result.data;
 
 
     renderCalendar();
@@ -3566,65 +3826,64 @@ async function loadCalendarTransactions() {
 function renderCalendar() {
 
     const grid =
-    document.getElementById(
-        "calendarGrid"
-    );
+        document.getElementById(
+            "calendarGrid"
+        );
 
 
     const title =
-    document.getElementById(
-        "calendarMonth"
-    );
+        document.getElementById(
+            "calendarMonth"
+        );
 
 
     if (
         !grid ||
         !title
     ) {
-
         return;
-
     }
 
 
-    grid.innerHTML = "";
+    grid.innerHTML =
+        "";
 
 
     const year =
-    calendarDate.getFullYear();
+        calendarDate.getFullYear();
 
 
     const month =
-    calendarDate.getMonth();
+        calendarDate.getMonth();
 
 
     title.textContent =
-    calendarDate.toLocaleDateString(
-        "en-US",
-        {
-            month:
-            "long",
+        calendarDate.toLocaleDateString(
+            "en-US",
+            {
+                month:
+                    "long",
 
-            year:
-            "numeric"
-        }
-    );
+                year:
+                    "numeric"
+            }
+        );
 
 
     const firstDay =
-    new Date(
-        year,
-        month,
-        1
-    ).getDay();
+        new Date(
+            year,
+            month,
+            1
+        ).getDay();
 
 
     const totalDays =
-    new Date(
-        year,
-        month + 1,
-        0
-    ).getDate();
+        new Date(
+            year,
+            month + 1,
+            0
+        ).getDate();
 
 
     for (
@@ -3634,13 +3893,13 @@ function renderCalendar() {
     ) {
 
         const empty =
-        document.createElement(
-            "div"
-        );
+            document.createElement(
+                "div"
+            );
 
 
         empty.className =
-        "calendar-day empty";
+            "calendar-day empty";
 
 
         grid.appendChild(
@@ -3651,15 +3910,15 @@ function renderCalendar() {
 
 
     const today =
-    new Date();
+        new Date();
 
 
     const todayString =
-    formatLocalDate(
-        today.getFullYear(),
-        today.getMonth(),
-        today.getDate()
-    );
+        formatLocalDate(
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate()
+        );
 
 
     for (
@@ -3669,25 +3928,25 @@ function renderCalendar() {
     ) {
 
         const dateString =
-        formatLocalDate(
-            year,
-            month,
-            day
-        );
+            formatLocalDate(
+                year,
+                month,
+                day
+            );
 
 
         const button =
-        document.createElement(
-            "button"
-        );
+            document.createElement(
+                "button"
+            );
 
 
         button.className =
-        "calendar-day";
+            "calendar-day";
 
 
         button.textContent =
-        day;
+            day;
 
 
         if (
@@ -3715,11 +3974,11 @@ function renderCalendar() {
 
 
         const hasTransaction =
-        transactionsData.some(
-            item =>
-            item.date ===
-            dateString
-        );
+            transactionsData.some(
+                item =>
+                    item.date ===
+                    dateString
+            );
 
 
         if (hasTransaction) {
@@ -3732,20 +3991,20 @@ function renderCalendar() {
 
 
         button.onclick =
-        () => {
+            () => {
 
-            selectedCalendarDate =
-            dateString;
-
-
-            renderCalendar();
+                selectedCalendarDate =
+                    dateString;
 
 
-            showCalendarTransactions(
-                dateString
-            );
+                renderCalendar();
 
-        };
+
+                showCalendarTransactions(
+                    dateString
+                );
+
+            };
 
 
         grid.appendChild(
@@ -3763,9 +4022,9 @@ function renderCalendar() {
 function updateCalendarSummary() {
 
     const incomeElement =
-    document.getElementById(
-        "calendarIncome"
-    );
+        document.getElementById(
+            "calendarIncome"
+        );
 
 
     if (!incomeElement) {
@@ -3774,56 +4033,56 @@ function updateCalendarSummary() {
 
 
     const year =
-    calendarDate.getFullYear();
+        calendarDate.getFullYear();
 
 
     const month =
-    calendarDate.getMonth();
+        calendarDate.getMonth();
 
 
     const monthlyTransactions =
-    transactionsData.filter(
-        item => {
+        transactionsData.filter(
+            item => {
 
-            const date =
-            new Date(
-                `${item.date}T00:00:00`
-            );
+                const date =
+                    new Date(
+                        `${item.date}T00:00:00`
+                    );
 
 
-            return (
-                date.getFullYear() ===
-                year &&
-                date.getMonth() ===
-                month
-            );
+                return (
+                    date.getFullYear() ===
+                    year &&
+                    date.getMonth() ===
+                    month
+                );
 
-        }
-    );
+            }
+        );
 
 
     const summary =
-    calculateSummary(
-        monthlyTransactions
-    );
+        calculateSummary(
+            monthlyTransactions
+        );
 
 
     document.getElementById(
         "calendarIncome"
     ).textContent =
-    `฿${formatMoney(summary.income)}`;
+        `฿${formatMoney(summary.income)}`;
 
 
     document.getElementById(
         "calendarExpense"
     ).textContent =
-    `฿${formatMoney(summary.expense)}`;
+        `฿${formatMoney(summary.expense)}`;
 
 
     document.getElementById(
         "calendarBalance"
     ).textContent =
-    `฿${formatMoney(summary.balance)}`;
+        `฿${formatMoney(summary.balance)}`;
 
 }
 
@@ -3837,28 +4096,28 @@ function changeMonth(direction) {
 
 
     selectedCalendarDate =
-    null;
+        null;
 
 
     renderCalendar();
 
 
     const title =
-    document.getElementById(
-        "selectedDateTitle"
-    );
+        document.getElementById(
+            "selectedDateTitle"
+        );
 
 
     const list =
-    document.getElementById(
-        "calendarTransactionList"
-    );
+        document.getElementById(
+            "calendarTransactionList"
+        );
 
 
     if (title) {
 
         title.textContent =
-        "Select a date";
+            "Select a date";
 
     }
 
@@ -3874,7 +4133,7 @@ function changeMonth(direction) {
             <h3>No date selected</h3>
 
             <p>
-            Choose a date on the calendar to view transactions.
+                Choose a date on the calendar to view transactions.
             </p>
 
         </div>
@@ -3889,11 +4148,11 @@ function changeMonth(direction) {
 function goToToday() {
 
     calendarDate =
-    new Date();
+        new Date();
 
 
     selectedCalendarDate =
-    getTodayString();
+        getTodayString();
 
 
     renderCalendar();
@@ -3909,55 +4168,53 @@ function goToToday() {
 function showCalendarTransactions(date) {
 
     const title =
-    document.getElementById(
-        "selectedDateTitle"
-    );
+        document.getElementById(
+            "selectedDateTitle"
+        );
 
 
     const list =
-    document.getElementById(
-        "calendarTransactionList"
-    );
+        document.getElementById(
+            "calendarTransactionList"
+        );
 
 
     if (
         !title ||
         !list
     ) {
-
         return;
-
     }
 
 
     const selected =
-    new Date(
-        `${date}T00:00:00`
-    );
+        new Date(
+            `${date}T00:00:00`
+        );
 
 
     title.textContent =
-    selected.toLocaleDateString(
-        "en-US",
-        {
-            day:
-            "numeric",
+        selected.toLocaleDateString(
+            "en-US",
+            {
+                day:
+                    "numeric",
 
-            month:
-            "long",
+                month:
+                    "long",
 
-            year:
-            "numeric"
-        }
-    );
+                year:
+                    "numeric"
+            }
+        );
 
 
     const items =
-    transactionsData.filter(
-        item =>
-        item.date ===
-        date
-    );
+        transactionsData.filter(
+            item =>
+                item.date ===
+                date
+        );
 
 
     if (!items.length) {
@@ -3984,58 +4241,48 @@ function showCalendarTransactions(date) {
 
 
     list.innerHTML =
-    items.map(
-        item => `
+        items.map(
+            item => `
 
-        <div class="calendar-transaction">
+            <div class="calendar-transaction">
 
-            <div class="category-icon">
+                <div class="category-icon">
 
-                <i class="${getCategoryIcon(item.category)}"></i>
+                    <i class="${getCategoryIcon(item.category)}"></i>
+
+                </div>
+
+
+                <div class="calendar-transaction-info">
+
+                    <b>
+                        ${escapeHTML(item.title)}
+                    </b>
+
+                    <p>
+                        ${escapeHTML(item.category)}
+                    </p>
+
+                </div>
+
+
+                <strong class="${item.type}">
+
+                    ${
+                        item.type ===
+                        "income"
+                            ? "+"
+                            : "-"
+                    }
+
+                    ฿${formatMoney(item.amount)}
+
+                </strong>
 
             </div>
 
-
-            <div class="calendar-transaction-info">
-
-                <b>
-                    ${escapeHTML(item.title)}
-                </b>
-
-                <p>
-                    ${escapeHTML(item.category)}
-                </p>
-
-            </div>
-
-
-            <strong class="${item.type}">
-
-                ${item.type === "income" ? "+" : "-"}
-
-                ฿${formatMoney(item.amount)}
-
-            </strong>
-
-        </div>
-
-        `
-    ).join("");
-
-}
-
-
-function getTodayString() {
-
-    const now =
-    new Date();
-
-
-    return formatLocalDate(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate()
-    );
+            `
+        ).join("");
 
 }
 
@@ -4043,15 +4290,15 @@ function getTodayString() {
 function savePreferences() {
 
     const animation =
-    document.getElementById(
-        "animationPreference"
-    );
+        document.getElementById(
+            "animationPreference"
+        );
 
 
     const notification =
-    document.getElementById(
-        "notificationPreference"
-    );
+        document.getElementById(
+            "notificationPreference"
+        );
 
 
     if (!animation) {
@@ -4068,8 +4315,8 @@ function savePreferences() {
     localStorage.setItem(
         "moneyMateNotifications",
         notification
-        ? notification.checked
-        : false
+            ? notification.checked
+            : false
     );
 
 
@@ -4081,35 +4328,37 @@ function savePreferences() {
 function loadPreferences() {
 
     const animation =
-    document.getElementById(
-        "animationPreference"
-    );
+        document.getElementById(
+            "animationPreference"
+        );
 
 
     const notification =
-    document.getElementById(
-        "notificationPreference"
-    );
+        document.getElementById(
+            "notificationPreference"
+        );
 
 
     const savedAnimation =
-    localStorage.getItem(
-        "moneyMateAnimation"
-    );
+        localStorage.getItem(
+            "moneyMateAnimation"
+        );
 
 
     const savedNotification =
-    localStorage.getItem(
-        "moneyMateNotifications"
-    );
+        localStorage.getItem(
+            "moneyMateNotifications"
+        );
 
 
     if (animation) {
 
         animation.checked =
-        savedAnimation === null
-        ? true
-        : savedAnimation === "true";
+            savedAnimation ===
+            null
+                ? true
+                : savedAnimation ===
+                "true";
 
     }
 
@@ -4117,8 +4366,8 @@ function loadPreferences() {
     if (notification) {
 
         notification.checked =
-        savedNotification ===
-        "true";
+            savedNotification ===
+            "true";
 
     }
 
@@ -4131,15 +4380,17 @@ function loadPreferences() {
 function applyAnimationPreference() {
 
     const saved =
-    localStorage.getItem(
-        "moneyMateAnimation"
-    );
+        localStorage.getItem(
+            "moneyMateAnimation"
+        );
 
 
     const enabled =
-    saved === null
-    ? true
-    : saved === "true";
+        saved ===
+        null
+            ? true
+            : saved ===
+            "true";
 
 
     document.body.classList.toggle(
@@ -4156,25 +4407,25 @@ function showToast(
 ) {
 
     let toast =
-    document.getElementById(
-        "moneyMateToast"
-    );
+        document.getElementById(
+            "moneyMateToast"
+        );
 
 
     if (!toast) {
 
         toast =
-        document.createElement(
-            "div"
-        );
+            document.createElement(
+                "div"
+            );
 
 
         toast.id =
-        "moneyMateToast";
+            "moneyMateToast";
 
 
         toast.className =
-        "toast";
+            "toast";
 
 
         toast.innerHTML = `
@@ -4199,31 +4450,31 @@ function showToast(
 
 
     const icon =
-    document.getElementById(
-        "moneyMateToastIcon"
-    );
+        document.getElementById(
+            "moneyMateToastIcon"
+        );
 
 
     const text =
-    document.getElementById(
-        "moneyMateToastText"
-    );
+        document.getElementById(
+            "moneyMateToastText"
+        );
 
 
     text.textContent =
-    message;
+        message;
 
 
     icon.className =
-    success
-    ? "ph-duotone ph-check-circle"
-    : "ph-duotone ph-warning-circle";
+        success
+            ? "ph-duotone ph-check-circle"
+            : "ph-duotone ph-warning-circle";
 
 
     icon.style.color =
-    success
-    ? "#34d399"
-    : "#fb7185";
+        success
+            ? "#34d399"
+            : "#fb7185";
 
 
     toast.classList.add(
@@ -4237,16 +4488,16 @@ function showToast(
 
 
     window.moneyMateToastTimer =
-    setTimeout(
-        () => {
+        setTimeout(
+            () => {
 
-            toast.classList.remove(
-                "show"
-            );
+                toast.classList.remove(
+                    "show"
+                );
 
-        },
-        2400
-    );
+            },
+            2400
+        );
 
 }
 
@@ -4256,15 +4507,21 @@ window.addEventListener(
     event => {
 
         const addModal =
-        document.getElementById(
-            "addModal"
-        );
+            document.getElementById(
+                "addModal"
+            );
 
 
         const editModal =
-        document.getElementById(
-            "editModal"
-        );
+            document.getElementById(
+                "editModal"
+            );
+
+
+        const savingModal =
+            document.getElementById(
+                "savingModal"
+            );
 
 
         if (
@@ -4288,6 +4545,17 @@ window.addEventListener(
 
         }
 
+
+        if (
+            savingModal &&
+            event.target ===
+            savingModal
+        ) {
+
+            closeSavingModal();
+
+        }
+
     }
 );
 
@@ -4305,6 +4573,8 @@ window.addEventListener(
 
             closeEdit();
 
+            closeSavingModal();
+
         }
 
     }
@@ -4317,10 +4587,10 @@ document.addEventListener(
 
 
         const savedTheme =
-        localStorage.getItem(
-            "theme"
-        ) ||
-        "midnight";
+            localStorage.getItem(
+                "theme"
+            ) ||
+            "midnight";
 
 
         changeTheme(
@@ -4349,9 +4619,9 @@ document.addEventListener(
         ) {
 
             const dateInput =
-            document.getElementById(
-                "date"
-            );
+                document.getElementById(
+                    "date"
+                );
 
 
             if (
@@ -4360,7 +4630,7 @@ document.addEventListener(
             ) {
 
                 dateInput.value =
-                getTodayString();
+                    getTodayString();
 
             }
 
@@ -4404,9 +4674,9 @@ document.addEventListener(
 
 
         const modalDate =
-        document.getElementById(
-            "modalDate"
-        );
+            document.getElementById(
+                "modalDate"
+            );
 
 
         if (
@@ -4415,10 +4685,9 @@ document.addEventListener(
         ) {
 
             modalDate.value =
-            getTodayString();
+                getTodayString();
 
         }
 
     }
 );
-
