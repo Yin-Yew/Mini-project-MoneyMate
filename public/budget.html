@@ -29,9 +29,7 @@ href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/duotone/style.css">
 <div class="logo">
 
 <div class="logo-icon">
-
 <i class="ph-duotone ph-wallet"></i>
-
 </div>
 
 <span>MoneyMate</span>
@@ -55,9 +53,13 @@ href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/duotone/style.css">
 <span>Analytics</span>
 </a>
 
-<a class="active" href="budget.html">
+<a
+class="active"
+href="budget.html">
+
 <i class="ph-duotone ph-target"></i>
 <span>Budget & Goals</span>
+
 </a>
 
 <a href="calendar.html">
@@ -92,6 +94,7 @@ Plan your spending and saving goals
 
 </header>
 
+
 <section class="form-card glass">
 
 <div class="form-heading">
@@ -114,6 +117,7 @@ New Goal
 
 </div>
 
+
 <div class="form-grid">
 
 <label>
@@ -133,6 +137,7 @@ placeholder="New Laptop">
 
 </label>
 
+
 <label>
 
 <span>Target amount</span>
@@ -150,6 +155,7 @@ placeholder="30000">
 </div>
 
 </label>
+
 
 <label class="date-field">
 
@@ -171,6 +177,7 @@ placeholder="5000">
 
 </div>
 
+
 <button
 class="save-main-btn"
 onclick="addGoal()">
@@ -182,6 +189,7 @@ Create Goal
 </button>
 
 </section>
+
 
 <section class="transaction glass">
 
@@ -207,9 +215,96 @@ Progress
 
 </div>
 
+
+<div
+class="modal"
+id="savingModal">
+
+<div class="modal-content glass saving-modal">
+
+<div class="modal-top">
+
+<div>
+
+<p class="page-eyebrow">
+Saving Progress
+</p>
+
+<h2>Add Saving</h2>
+
+</div>
+
+<button
+class="modal-close"
+onclick="closeSavingModal()">
+
+<i class="ph-duotone ph-x"></i>
+
+</button>
+
+</div>
+
+
+<div class="saving-goal-summary">
+
+<div class="saving-goal-icon">
+
+<i class="ph-duotone ph-piggy-bank"></i>
+
+</div>
+
+<div>
+
+<p id="savingGoalName">
+Goal
+</p>
+
+<h3 id="savingGoalProgress">
+฿0 / ฿0
+</h3>
+
+</div>
+
+</div>
+
+
+<label class="saving-amount-label">
+
+Amount to add
+
+<div class="input-shell">
+
+<i class="ph-duotone ph-coins"></i>
+
+<input
+id="savingAmount"
+type="number"
+min="1"
+step="0.01"
+placeholder="Enter amount">
+
+</div>
+
+</label>
+
+
+<button
+class="save-transaction-btn saving-confirm-btn"
+onclick="confirmAddSaving()">
+
+<i class="ph-duotone ph-plus-circle"></i>
+
+Add Saving
+
+</button>
+
+</div>
+
+</div>
+
+
 <script src="script.js"></script>
 
 </body>
 
 </html>
-
