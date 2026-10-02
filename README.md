@@ -284,7 +284,7 @@ Mini-project-MoneyMate/
 │
 ├── .gitignore
 ├── README.md
-└── report.pdf
+└── report_miniproject.pdf
 ```
 
 ---
